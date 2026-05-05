@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pro rodiče · Lingua · Kroužek předškoláka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root{
+  --bg: #f8fbfd;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-muted: #94a3b8;
+  --line: #e2e8f0;
+  --line-soft: #f1f5f9;
+  --blue: #32a0d2;
+  --blue-dark: #2588b3;
+  --blue-light: #e6f4fb;
+  --blue-border: #b3dbed;
+  --orange: #ffaa37;
+  --orange-dark: #e6911e;
+  --orange-light: #fff5e3;
+  --orange-border: #ffd99e;
+  --indigo: #2c2768;
+  --font: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, sans-serif;
+  --r: 12px;
+  --rl: 20px;
+  --shadow: 0 4px 16px rgba(50, 160, 210, .08), 0 1px 3px rgba(15, 23, 42, .04);
+  --shadow-lg: 0 12px 40px rgba(50, 160, 210, .12), 0 2px 8px rgba(15, 23, 42, .04);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:18px;}
+body{
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  font-weight: 500;
+}
+
+/* Topbar */
+.topbar{
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,.92);
+}
+.topbar-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: .8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.brand-mark{
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand-logo{
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.brand-text{
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.brand-name{
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.brand-sub{
+  font-size: .78rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.topbar-spacer{flex:1;}
+.topbar-link{
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: .5rem .85rem;
+  border-radius: 8px;
+}
+.topbar-link:hover{ background: var(--line-soft); color: var(--ink); }
+
+.app{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+}
+
+/* Hero */
+.hero{
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+}
+.hero-eyebrow{
+  display: inline-block;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .22em;
+  color: var(--orange-dark);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  padding: .4rem 1.1rem;
+  background: var(--orange-light);
+  border-radius: 99px;
+  border: 1px solid var(--orange-border);
+}
+.hero-title{
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: .8rem;
+}
+.hero-title em{
+  font-style: italic;
+  color: var(--orange);
+}
+.hero-desc{
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+/* Tabs */
+.tabs{
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  margin-bottom: 2.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: .35rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--shadow);
+}
+.tab{
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: .65rem 1.5rem;
+  color: var(--ink-soft);
+  border-radius: 99px;
+  text-decoration: none;
+}
+.tab.active{
+  background: var(--blue);
+  color: white;
+}
+
+/* Sekce */
+.section{
+  margin-bottom: 3rem;
+}
+.section-title{
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.section-title::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--orange);
+  border-radius: 99px;
+}
+
+/* Intro card */
+.intro-card{
+  background: var(--blue-light);
+  border-left: 4px solid var(--blue);
+  border-radius: var(--r);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 1.02rem;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.intro-card b{ color: var(--blue-dark); font-weight: 700; }
+
+/* Oblast detailní karta */
+.oblast-detail{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.oblast-detail::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--card-color, var(--blue));
+}
+.oblast-detail-header{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.oblast-detail-icon{
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border-radius: 50%;
+}
+.oblast-detail-title{
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--card-color, var(--blue));
+}
+.oblast-detail-perex{
+  font-size: 1rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Vhodné aktivity */
+.aktivity-title{
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-muted);
+  margin-bottom: .6rem;
+}
+.aktivity{
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: .5rem;
+}
+.aktivity li{
+  background: var(--bg);
+  border-radius: var(--r);
+  padding: .6rem .9rem;
+  font-size: .95rem;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.aktivity li::before{
+  content: '✓';
+  color: var(--card-color, var(--blue));
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Diagnostika */
+.diagnostika{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+.diagnostika-title{
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-muted);
+  margin-bottom: .8rem;
+}
+.urovne{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+.uroven-btn{
+  background: var(--bg);
+  border: 2px solid var(--line);
+  border-radius: var(--r);
+  padding: .8rem .5rem;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-align: center;
+  transition: all .15s;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.uroven-btn:hover{ border-color: var(--card-color, var(--blue)); }
+.uroven-btn.selected{
+  background: var(--card-color, var(--blue));
+  color: white;
+  border-color: var(--card-color, var(--blue));
+}
+
+/* Tipy */
+.tipy-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.tip-block{
+  background: var(--orange-light);
+  border-left: 4px solid var(--orange);
+  border-radius: var(--r);
+  padding: 1.2rem 1.5rem;
+}
+.tip-block-icon{ font-size: 1.5rem; margin-bottom: .3rem; display: block; }
+.tip-block-title{ font-size: 1.15rem; font-weight: 800; margin-bottom: .3rem; color: var(--ink); }
+.tip-block-desc{ font-size: .95rem; color: var(--ink-soft); line-height: 1.5; }
+
+/* Print btn */
+.print-section{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--rl);
+  padding: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+.print-btn{
+  background: var(--blue);
+  color: white;
+  border: none;
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: .9rem 2rem;
+  border-radius: 99px;
+  cursor: pointer;
+  margin-top: .8rem;
+  transition: all .15s;
+}
+.print-btn:hover{ background: var(--blue-dark); transform: translateY(-2px); }
+
+/* Footer */
+.footer{
+  margin-top: 5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 1rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+.footer-logo{
+  width: 36px;
+  height: 47px;
+  object-fit: contain;
+  margin-bottom: .8rem;
+  opacity: .5;
+}
+.footer b{ color: var(--ink-soft); font-weight: 700; }
+.footer a{ color: var(--blue); text-decoration: none; }
+
+@media print{
+  .topbar, .tabs, .footer, .print-section { display: none; }
+  body{ background: white; }
+  .oblast-detail{ break-inside: avoid; page-break-inside: avoid; }
+  .urovne{ display: flex; gap: 8px; }
+  .uroven-btn{ border: 2px solid #999; padding: 6px 10px; font-size: .8rem; }
+}
+
+@media (max-width: 600px){
+  html{ font-size: 16px; }
+  .app{ padding: 0 1rem 4rem; }
+  .topbar-inner{ padding: .65rem 1rem; }
+  .topbar-link{ display: none; }
+  .hero{ padding: 2rem .5rem 1.5rem; }
+  .hero-title{ font-size: 2rem; }
+  .urovne{ grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand-mark">
+      <img class="brand-logo" src="logo.png" alt="Lingua Universal">
+      <div class="brand-text">
+        <span class="brand-name">Lingua</span>
+        <span class="brand-sub">Kroužek předškoláka</span>
+      </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <a href="https://www.zslingua.cz" class="topbar-link" target="_blank" rel="noopener">zslingua.cz ↗</a>
+  </div>
+</div>
+
+<main class="app">
+
+  <section class="hero">
+    <div class="hero-eyebrow">Pro rodiče · Příprava k zápisu</div>
+    <h1 class="hero-title">Jak připravit <em>předškoláka</em></h1>
+    <p class="hero-desc">Šest klíčových oblastí, které se zkouší u zápisu k povinné školní docházce. Tipy, aktivity a diagnostika, které pomohou doma.</p>
+  </section>
+
+  <div class="tabs">
+    <a href="index.html" class="tab">🎮 Pro děti</a>
+    <a href="rodice.html" class="tab active">👨‍👩‍👧 Pro rodiče</a>
+  </div>
+
+  <div class="intro-card">
+    <b>Vážení rodiče,</b> u zápisu se sleduje šest hlavních oblastí. Některé jsou pohybové (grafomotorika), jiné rozumové (předmatematické představy, sluch, zrak) a další pro orientaci v čase a prostoru. Najdete zde popis každé oblasti, vhodné aktivity pro domov a možnost si průběžně zaškrtnout, jak jsou na tom Vaše děti — jako v našem pracovním sešitě.
+  </div>
+
+  <h2 class="section-title">📋 Šest oblastí přípravy</h2>
+
+  <div class="oblast-detail" style="--card-color: #ef4444">
+    <div class="oblast-detail-header">
+      <span class="oblast-detail-icon">🖍️</span>
+      <div class="oblast-detail-title">Grafomotorika</div>
+    </div>
+    <p class="oblast-detail-perex">Rozvíjí koordinaci oka a ruky, posiluje svalstvo ruky a prstů, připravuje na správné držení tužky a formuje předpoklady pro čitelné písmo.</p>
+    <div class="aktivity-title">Vhodné aktivity</div>
+    <ul class="aktivity">
+      <li>Kreslení různých čar a tvarů</li>
+      <li>Omalovánky</li>
+      <li>Práce s plastelínou nebo hlínou</li>
+      <li>Válení hadů, vytváření kuliček</li>
+      <li>Navlékání korálků</li>
+      <li>Skládání puzzlů</li>
+      <li>Práce s kolíčky na prádlo</li>
+      <li>Stříhání papíru nůžkami</li>
+    </ul>
+    <div class="diagnostika">
+      <div class="diagnostika-title">Úroveň ovládání</div>
+      <div class="urovne" data-oblast="grafomotorika">
+        <button class="uroven-btn">Začíná</button>
+        <button class="uroven-btn">Zkouší</button>
+        <button class="uroven-btn">Zvládá</button>
+        <button class="uroven-btn">Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="oblast-detail" style="--card-color: #ec4899">
+    <div class="oblast-detail-header">
+      <span class="oblast-detail-icon">🔢</span>
+      <div class="oblast-detail-title">Předmatematické představy</div>
+    </div>
+    <p class="oblast-detail-perex">Matematické myšlení se rozvíjí postupně — od základních pojmů jako více/méně, velký/malý až po pochopení čísel a množství. Současně se rozvíjí logické uvažování, řešení problémů a posloupnost.</p>
+    <div class="aktivity-title">Vhodné aktivity</div>
+    <ul class="aktivity">
+      <li>Počítání předmětů kolem sebe (hračky, ovoce, schody)</li>
+      <li>Třídění podle barev, velikostí, tvarů</li>
+      <li>Řazení dějů po sobě</li>
+      <li>Řazení předmětů podle velikosti</li>
+      <li>Hry s kostkami, domino, pexeso</li>
+    </ul>
+    <div class="diagnostika">
+      <div class="diagnostika-title">Úroveň ovládání</div>
+      <div class="urovne" data-oblast="predmatematicke">
+        <button class="uroven-btn">Začíná</button>
+        <button class="uroven-btn">Zkouší</button>
+        <button class="uroven-btn">Zvládá</button>
+        <button class="uroven-btn">Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="oblast-detail" style="--card-color: #10b981">
+    <div class="oblast-detail-header">
+      <span class="oblast-detail-icon">👂</span>
+      <div class="oblast-detail-title">Sluchové vnímání</div>
+    </div>
+    <p class="oblast-detail-perex">Jeden z nejzásadnějších předpokladů pro úspěšné učení. Děti s dobře rozvinutým sluchovým vnímáním lépe rozumí mluvené řeči, snáze se učí číst a psát, protože rozlišují jednotlivé hlásky.</p>
+    <div class="aktivity-title">Vhodné aktivity</div>
+    <ul class="aktivity">
+      <li>Hra na "tichou poštu" — šeptání zpráv</li>
+      <li>Poznávání zvuků kolem nás</li>
+      <li>Napodobování zvuků zvířat, dopravy</li>
+      <li>Hledání slov začínajících na stejnou hlásku</li>
+      <li>Tleskání slabik při vyslovování</li>
+      <li>Rýmování — hledání slov, která se rýmují</li>
+      <li>Co slyšíš na začátku/konci slova?</li>
+      <li>Rozkládání slov na hlásky (M-A-M-A)</li>
+      <li>Tleskání podle rytmu hudby</li>
+      <li>Opakování sekvencí zvuků</li>
+      <li>Poslech krátkých příběhů a převyprávění</li>
+    </ul>
+    <div class="diagnostika">
+      <div class="diagnostika-title">Úroveň ovládání</div>
+      <div class="urovne" data-oblast="sluchove">
+        <button class="uroven-btn">Začíná</button>
+        <button class="uroven-btn">Zkouší</button>
+        <button class="uroven-btn">Zvládá</button>
+        <button class="uroven-btn">Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="oblast-detail" style="--card-color: #f59e0b">
+    <div class="oblast-detail-header">
+      <span class="oblast-detail-icon">🧭</span>
+      <div class="oblast-detail-title">Prostorová orientace</div>
+    </div>
+    <p class="oblast-detail-perex">Důležitá pro učení matematiky (geometrie, číselná osa) a pro rozvoj písma (orientace písmen, psaní zleva doprava). Prostorová představivost pomáhá dětem řešit problémy, vizualizovat scénáře a plánovat.</p>
+    <div class="aktivity-title">Vhodné aktivity</div>
+    <ul class="aktivity">
+      <li>Stavění z kostek a puzzle</li>
+      <li>Hry na schovávanou</li>
+      <li>Bludiště a labyrinty</li>
+      <li>Hra na "teplé–studené" při hledání</li>
+      <li>Popis cesty (do obchodu, k babičce)</li>
+      <li>Orientace podle světových stran</li>
+      <li>Skládání podle návodu — Lego, origami</li>
+      <li>Pohybové hry s příkazy doprava/doleva</li>
+    </ul>
+    <div class="diagnostika">
+      <div class="diagnostika-title">Úroveň ovládání</div>
+      <div class="urovne" data-oblast="prostorova">
+        <button class="uroven-btn">Začíná</button>
+        <button class="uroven-btn">Zkouší</button>
+        <button class="uroven-btn">Zvládá</button>
+        <button class="uroven-btn">Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="oblast-detail" style="--card-color: #3b82f6">
+    <div class="oblast-detail-header">
+      <span class="oblast-detail-icon">⏰</span>
+      <div class="oblast-detail-title">Časová orientace</div>
+    </div>
+    <p class="oblast-detail-perex">Základ logického myšlení. Pomáhá dětem pochopit strukturu dne, týdne a roku. Logická posloupnost rozvíjí schopnost vidět souvislosti — co bylo příčinou, co je následkem.</p>
+    <div class="aktivity-title">Vhodné aktivity</div>
+    <ul class="aktivity">
+      <li>Skládání rozstříhaných komiksů</li>
+      <li>Hra "Co bylo předtím?"</li>
+      <li>Řazení obrázků denních činností</li>
+      <li>Časové bludiště — od rána do večera</li>
+      <li>Složitější sekvence 4-6 obrázků</li>
+      <li>Práce s kalendářem</li>
+      <li>Vyprávění zážitků chronologicky</li>
+      <li>Předvídání — "Co se stane příště?"</li>
+    </ul>
+    <div class="diagnostika">
+      <div class="diagnostika-title">Úroveň ovládání</div>
+      <div class="urovne" data-oblast="casova">
+        <button class="uroven-btn">Začíná</button>
+        <button class="uroven-btn">Zkouší</button>
+        <button class="uroven-btn">Zvládá</button>
+        <button class="uroven-btn">Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="oblast-detail" style="--card-color: #8b5cf6">
+    <div class="oblast-detail-header">
+      <span class="oblast-detail-icon">👁️</span>
+      <div class="oblast-detail-title">Zrakové vnímání</div>
+    </div>
+    <p class="oblast-detail-perex">Klíčová dovednost pro úspěch ve škole. Nejde jen o to, že dítě dobře vidí, ale o schopnost mozku správně zpracovat vizuální informace. Základ pro čtení, psaní i matematiku.</p>
+    <div class="aktivity-title">Vhodné aktivity</div>
+    <ul class="aktivity">
+      <li>Puzzle a skládačky</li>
+      <li>Hledání rozdílů v obrázcích</li>
+      <li>Dotvoření poloviny obrázku</li>
+      <li>Kopírování vzorů</li>
+      <li>Třídění podle barev a tvarů</li>
+    </ul>
+    <div class="diagnostika">
+      <div class="diagnostika-title">Úroveň ovládání</div>
+      <div class="urovne" data-oblast="zrakove">
+        <button class="uroven-btn">Začíná</button>
+        <button class="uroven-btn">Zkouší</button>
+        <button class="uroven-btn">Zvládá</button>
+        <button class="uroven-btn">Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">💡 Obecné tipy</h2>
+
+  <div class="tipy-grid">
+    <div class="tip-block">
+      <span class="tip-block-icon">🎯</span>
+      <div class="tip-block-title">Pravidelnost</div>
+      <div class="tip-block-desc">Lepší 10 minut denně než hodina jednou za týden. Předškoláci si zvyknou na rytmus.</div>
+    </div>
+    <div class="tip-block">
+      <span class="tip-block-icon">🎉</span>
+      <div class="tip-block-title">Hra, ne dril</div>
+      <div class="tip-block-desc">Vše je hra. Když děti vidí radost, učí se lehce a rády se vrací.</div>
+    </div>
+    <div class="tip-block">
+      <span class="tip-block-icon">🤲</span>
+      <div class="tip-block-title">Manuální dovednosti</div>
+      <div class="tip-block-desc">Plastelína, navlékání korálků, stříhání — vše posiluje ruku pro psaní.</div>
+    </div>
+    <div class="tip-block">
+      <span class="tip-block-icon">📖</span>
+      <div class="tip-block-title">Čtení nahlas</div>
+      <div class="tip-block-desc">Denně si s dítětem čtěte. Rozvíjíte sluch, slovní zásobu i představivost.</div>
+    </div>
+    <div class="tip-block">
+      <span class="tip-block-icon">🌳</span>
+      <div class="tip-block-title">Venku</div>
+      <div class="tip-block-desc">Pohyb a venkovní prostředí — počítání schodů, popis cesty, sběr přírodnin.</div>
+    </div>
+    <div class="tip-block">
+      <span class="tip-block-icon">⏳</span>
+      <div class="tip-block-title">Trpělivost</div>
+      <div class="tip-block-desc">Každé dítě má své tempo. Srovnání s vrstevníky není měřítko úspěchu.</div>
+    </div>
+  </div>
+
+  <div class="print-section">
+    <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:.5rem">📄 Záznamový arch</h3>
+    <p style="color:var(--ink-soft);margin-bottom:.8rem">Své zaškrtnuté úrovně si můžete vytisknout — ideální pro založení do školky nebo do desek.</p>
+    <button class="print-btn" onclick="window.print()">🖨️ Vytisknout</button>
+  </div>
+
+  <footer class="footer">
+    <img class="footer-logo" src="logo.png" alt="Lingua Universal">
+    <div><b>ZŠ a MŠ Lingua Universal</b></div>
+    <div>Sovova 480/2, 412 01 Litoměřice</div>
+    <div style="margin-top:.5rem">
+      <a href="https://www.zslingua.cz" target="_blank" rel="noopener">zslingua.cz</a>
+      <span style="margin:0 .4rem">·</span>
+      <a href="index.html">Zpět na úvod</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+/* === Diagnostické tlačítka — zaškrtávání úrovně === */
+const STORAGE_KEY = 'lingua-predskolak-diagnostika-v1';
+
+function loadDiag(){
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if(s) return JSON.parse(s);
+  } catch(e){}
+  return {};
+}
+
+function saveDiag(d){
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  } catch(e){}
+}
+
+function renderDiag(){
+  const d = loadDiag();
+  document.querySelectorAll('.urovne').forEach(grp => {
+    const oblast = grp.dataset.oblast;
+    const selected = d[oblast];
+    grp.querySelectorAll('.uroven-btn').forEach((btn, idx) => {
+      btn.classList.toggle('selected', selected === idx);
+    });
+  });
+}
+
+document.querySelectorAll('.urovne .uroven-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const grp = btn.parentElement;
+    const oblast = grp.dataset.oblast;
+    const idx = Array.from(grp.querySelectorAll('.uroven-btn')).indexOf(btn);
+    const d = loadDiag();
+    if(d[oblast] === idx){
+      delete d[oblast];  // toggle off
+    } else {
+      d[oblast] = idx;
+    }
+    saveDiag(d);
+    renderDiag();
+  });
+});
+
+renderDiag();
+</script>
+</body>
+</html>

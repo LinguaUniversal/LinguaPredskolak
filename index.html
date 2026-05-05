@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lingua · Kroužek předškoláka · Příprava k zápisu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root{
+  --bg: #f8fbfd;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-muted: #94a3b8;
+  --line: #e2e8f0;
+  --line-soft: #f1f5f9;
+
+  --blue: #32a0d2;
+  --blue-dark: #2588b3;
+  --blue-light: #e6f4fb;
+  --blue-border: #b3dbed;
+
+  --orange: #ffaa37;
+  --orange-dark: #e6911e;
+  --orange-light: #fff5e3;
+  --orange-border: #ffd99e;
+
+  --indigo: #2c2768;  /* tmavá modrá z PDF nadpisů */
+
+  --font: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --r: 12px;
+  --rl: 20px;
+  --shadow: 0 4px 16px rgba(50, 160, 210, .08), 0 1px 3px rgba(15, 23, 42, .04);
+  --shadow-lg: 0 12px 40px rgba(50, 160, 210, .12), 0 2px 8px rgba(15, 23, 42, .04);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:18px;}
+body{
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  font-weight: 500;
+}
+
+/* Topbar */
+.topbar{
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,.92);
+}
+.topbar-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: .8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.brand-mark{
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand-logo{
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.brand-text{
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.brand-name{
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.brand-sub{
+  font-size: .78rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.topbar-spacer{flex:1;}
+.topbar-link{
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: .5rem .85rem;
+  border-radius: 8px;
+  transition: all .15s;
+}
+.topbar-link:hover{ background: var(--line-soft); color: var(--ink); }
+
+.app{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+}
+
+/* Hero */
+.hero{
+  text-align: center;
+  padding: 4rem 1rem 3rem;
+}
+.hero-logo{
+  width: 130px;
+  height: 168px;
+  object-fit: contain;
+  margin-bottom: 1.2rem;
+  filter: drop-shadow(0 8px 28px rgba(50, 160, 210, .2));
+}
+.hero-eyebrow{
+  display: inline-block;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .22em;
+  color: var(--blue);
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  padding: .4rem 1.1rem;
+  background: var(--blue-light);
+  border-radius: 99px;
+  border: 1px solid var(--blue-border);
+}
+.hero-title{
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  margin-bottom: 1rem;
+  max-width: 740px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-title em{
+  font-style: italic;
+  color: var(--orange);
+  font-weight: 800;
+}
+.hero-desc{
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+/* Tabs */
+.tabs{
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  margin-bottom: 2.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: .35rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--shadow);
+}
+.tab{
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: .65rem 1.5rem;
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  border-radius: 99px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.tab.active{
+  background: var(--blue);
+  color: white;
+}
+
+/* Section title */
+.section-title{
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: .8rem;
+  text-align: center;
+}
+.section-title::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--orange);
+  border-radius: 99px;
+}
+
+/* Grid oblastí */
+.oblasti-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.oblast-card{
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all .2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.oblast-card::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 4px;
+  background: var(--card-color, var(--blue));
+}
+.oblast-card:hover{
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--card-color, var(--blue));
+}
+.oblast-card.disabled{
+  opacity: .55;
+  cursor: not-allowed;
+}
+.oblast-card.disabled:hover{ transform: none; box-shadow: none; border-color: var(--line); }
+
+.oblast-icon{
+  font-size: 3rem;
+  line-height: 1;
+}
+.oblast-title{
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--card-color, var(--blue));
+  letter-spacing: -.01em;
+}
+.oblast-desc{
+  font-size: .95rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  flex: 1;
+}
+.oblast-footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: .8rem;
+  border-top: 1px solid var(--line);
+  font-size: .85rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+.oblast-cviceni-count{ font-weight: 700; color: var(--ink); }
+.oblast-arrow{
+  background: var(--card-color, var(--blue));
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.oblast-card.disabled .oblast-arrow{ background: var(--ink-muted); }
+.soon-badge{
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--ink-muted);
+  font-weight: 700;
+  background: var(--line-soft);
+  padding: .2rem .6rem;
+  border-radius: 99px;
+}
+
+/* Info bloky */
+.info-blocks{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 3rem;
+}
+.info-block{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+}
+.info-block-icon{
+  font-size: 2rem;
+  margin-bottom: .5rem;
+  display: block;
+}
+.info-block-title{
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: .4rem;
+}
+.info-block-desc{
+  font-size: 1rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* Footer */
+.footer{
+  margin-top: 5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 1rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+.footer-logo{
+  width: 36px;
+  height: 47px;
+  object-fit: contain;
+  margin-bottom: .8rem;
+  opacity: .5;
+}
+.footer b{ color: var(--ink-soft); font-weight: 700; }
+.footer a{ color: var(--blue); text-decoration: none; }
+
+/* Mobile */
+@media (max-width: 600px){
+  html{ font-size: 16px; }
+  .app{ padding: 0 1rem 4rem; }
+  .topbar-inner{ padding: .65rem 1rem; }
+  .topbar-link{ display: none; }
+  .hero{ padding: 2.5rem .5rem 2rem; }
+  .hero-logo{ width: 90px; height: 116px; margin-bottom: 1rem; }
+  .hero-title{ font-size: 2.2rem; }
+  .hero-desc{ font-size: 1rem; }
+  .oblast-icon{ font-size: 2.5rem; }
+  .oblast-title{ font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand-mark">
+      <img class="brand-logo" src="logo.png" alt="Lingua Universal">
+      <div class="brand-text">
+        <span class="brand-name">Lingua</span>
+        <span class="brand-sub">Kroužek předškoláka</span>
+      </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <a href="https://www.zslingua.cz" class="topbar-link" target="_blank" rel="noopener">zslingua.cz ↗</a>
+  </div>
+</div>
+
+<main class="app">
+
+  <section class="hero">
+    <img class="hero-logo" src="logo.png" alt="Lingua Universal">
+    <div class="hero-eyebrow">ZŠ Lingua Universal · Příprava k zápisu</div>
+    <h1 class="hero-title">Kroužek <em>předškoláka</em></h1>
+    <p class="hero-desc">Šest oblastí přípravy k zápisu — grafomotorika, předmatematické představy, sluchové a zrakové vnímání, prostorová a časová orientace. Hraj a uč se s naší sovou!</p>
+  </section>
+
+  <!-- Záložky: Pro děti / Pro rodiče -->
+  <div class="tabs">
+    <a href="index.html" class="tab active">🎮 Pro děti</a>
+    <a href="rodice.html" class="tab">👨‍👩‍👧 Pro rodiče</a>
+  </div>
+
+  <h2 class="section-title">Vyber si oblast</h2>
+
+  <div class="oblasti-grid">
+
+    <a href="predmatematicke.html" class="oblast-card" style="--card-color: #ec4899">
+      <span class="oblast-icon">🔢</span>
+      <div class="oblast-title">Předmatematické<br>představy</div>
+      <div class="oblast-desc">Více-méně, počítání 1-10, třídění, rozeznávání množství.</div>
+      <div class="oblast-footer">
+        <span class="oblast-cviceni-count">5 cvičení</span>
+        <span class="oblast-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="zrakove.html" class="oblast-card" style="--card-color: #8b5cf6">
+      <span class="oblast-icon">👁️</span>
+      <div class="oblast-title">Zrakové<br>vnímání</div>
+      <div class="oblast-desc">Najdi rozdíly, doplň vzor, hledání detailů, postřeh.</div>
+      <div class="oblast-footer">
+        <span class="oblast-cviceni-count">5 cvičení</span>
+        <span class="oblast-arrow">→</span>
+      </div>
+    </a>
+
+    <div class="oblast-card disabled" style="--card-color: #10b981">
+      <span class="oblast-icon">👂</span>
+      <div class="oblast-title">Sluchové<br>vnímání</div>
+      <div class="oblast-desc">Rýmy, první písmeno, slabiky, rytmus. S audio podporou.</div>
+      <div class="oblast-footer">
+        <span class="soon-badge">Brzy</span>
+        <span class="oblast-arrow">→</span>
+      </div>
+    </div>
+
+    <div class="oblast-card disabled" style="--card-color: #f59e0b">
+      <span class="oblast-icon">🧭</span>
+      <div class="oblast-title">Prostorová<br>orientace</div>
+      <div class="oblast-desc">Doleva, doprava, nahoru, dolů, kde co je.</div>
+      <div class="oblast-footer">
+        <span class="soon-badge">Brzy</span>
+        <span class="oblast-arrow">→</span>
+      </div>
+    </div>
+
+    <div class="oblast-card disabled" style="--card-color: #3b82f6">
+      <span class="oblast-icon">⏰</span>
+      <div class="oblast-title">Časová<br>orientace</div>
+      <div class="oblast-desc">Co bylo dřív, denní režim, roční období, posloupnost.</div>
+      <div class="oblast-footer">
+        <span class="soon-badge">Brzy</span>
+        <span class="oblast-arrow">→</span>
+      </div>
+    </div>
+
+    <div class="oblast-card disabled" style="--card-color: #ef4444">
+      <span class="oblast-icon">🖍️</span>
+      <div class="oblast-title">Grafomotorika</div>
+      <div class="oblast-desc">Obtahování čar, vlnovek, vzorců — myší nebo prstem.</div>
+      <div class="oblast-footer">
+        <span class="soon-badge">Brzy</span>
+        <span class="oblast-arrow">→</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="info-blocks">
+    <div class="info-block">
+      <span class="info-block-icon">🎯</span>
+      <div class="info-block-title">Příprava k zápisu</div>
+      <div class="info-block-desc">Pokrývá 6 hlavních oblastí, které se u zápisu zkouší. Hraj si hravou formou.</div>
+    </div>
+    <div class="info-block">
+      <span class="info-block-icon">🏆</span>
+      <div class="info-block-title">Sbírej hvězdičky</div>
+      <div class="info-block-desc">Za každé cvičení získáš hvězdičky. Kolik jich nasbíráš?</div>
+    </div>
+    <div class="info-block">
+      <span class="info-block-icon">👨‍👩‍👧</span>
+      <div class="info-block-title">Tipy pro rodiče</div>
+      <div class="info-block-desc">V sekci pro rodiče najdete aktivity pro každou oblast, které se hodí dělat doma.</div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <img class="footer-logo" src="logo.png" alt="Lingua Universal">
+    <div><b>ZŠ a MŠ Lingua Universal</b></div>
+    <div>Sovova 480/2, 412 01 Litoměřice</div>
+    <div style="margin-top:.5rem">
+      <a href="https://www.zslingua.cz" target="_blank" rel="noopener">zslingua.cz</a>
+      <span style="margin:0 .4rem">·</span>
+      <span>Kroužek předškoláka — půlroční příprava k zápisu</span>
+    </div>
+  </footer>
+
+</main>
+
+</body>
+</html>

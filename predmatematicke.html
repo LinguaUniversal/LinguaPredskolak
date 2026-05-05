@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Předmatematické představy · Lingua předškolák</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root{
+  --bg: #fdf2f8;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-muted: #94a3b8;
+  --line: #e2e8f0;
+  --line-soft: #f1f5f9;
+
+  --primary: #ec4899;       /* růžová pro předmatematické */
+  --primary-dark: #db2777;
+  --primary-light: #fce7f3;
+  --primary-border: #fbcfe8;
+
+  --blue: #32a0d2;
+  --orange: #ffaa37;
+
+  --ok: #10b981;
+  --err: #ef4444;
+
+  --font: 'Barlow Condensed', -apple-system, sans-serif;
+  --r: 12px;
+  --rl: 20px;
+  --shadow: 0 4px 16px rgba(236, 72, 153, .12);
+  --shadow-lg: 0 12px 40px rgba(236, 72, 153, .18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:18px;}
+body{
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  font-weight: 500;
+}
+
+/* Topbar */
+.topbar{
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: .8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.brand-mark{
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand-logo{
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.brand-text{
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.brand-name{
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.brand-sub{
+  font-size: .78rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.topbar-spacer{flex:1;}
+.topbar-section{
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  padding: .4rem 1rem;
+  background: var(--primary-light);
+  border-radius: 99px;
+  border: 1px solid var(--primary-border);
+}
+.section-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: inline-block;
+}
+
+.app{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+}
+
+/* Views */
+.view{ display: none; }
+.view.active{ display: block; }
+
+/* Hero */
+.hero{
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem;
+}
+.hero-icon{
+  font-size: 4rem;
+  display: block;
+  margin-bottom: .5rem;
+  line-height: 1;
+}
+.hero-title{
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.hero-title em{
+  font-style: italic;
+  color: var(--primary);
+}
+.hero-desc{
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  margin-top: .5rem;
+}
+
+/* Body */
+.score-bar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: .8rem 1.5rem;
+  margin: 0 auto 2rem;
+  max-width: 480px;
+  box-shadow: var(--shadow);
+}
+.stars{
+  font-size: 1.5rem;
+  color: var(--orange);
+  letter-spacing: .15em;
+}
+.score-num{
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+.score-label{
+  font-size: .9rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* Cvičení karty - menu */
+.cviceni-list{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .85rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.cv-card{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  transition: all .15s;
+  width: 100%;
+}
+.cv-card:hover{
+  border-color: var(--primary);
+  transform: translateX(4px);
+  box-shadow: var(--shadow);
+}
+.cv-card.done{
+  border-color: var(--ok);
+  background: #f0fdf4;
+}
+.cv-icon{
+  font-size: 2rem;
+  width: 56px;
+  height: 56px;
+  background: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cv-content{ flex: 1; }
+.cv-title{
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.cv-desc{
+  font-size: .92rem;
+  color: var(--ink-soft);
+  margin-top: .15rem;
+}
+.cv-stars{
+  font-size: 1rem;
+  color: var(--orange);
+  letter-spacing: .1em;
+  flex-shrink: 0;
+}
+.cv-arrow{
+  font-size: 1.5rem;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+/* === BACK BTN === */
+.back-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: .55rem 1.2rem;
+  border-radius: 99px;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+.back-btn:hover{ border-color: var(--primary); color: var(--primary); }
+
+/* === ZADÁNÍ === */
+.zadani{
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--rl);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+/* === CV1: Více ryb === */
+.akvarium-row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.akvarium{
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all .15s;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .3rem;
+}
+.akvarium:hover:not(:disabled){
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+.akvarium.correct{
+  border-color: var(--ok);
+  background: #d1fae5;
+  animation: bounce 0.5s;
+}
+.akvarium.wrong{
+  border-color: var(--err);
+  background: #fee2e2;
+  animation: shake 0.4s;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* === CV2: Bingo - tečky a počty === */
+.bingo-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .8rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+@media (min-width: 600px){
+  .bingo-grid{ grid-template-columns: repeat(4, 1fr); }
+}
+.bingo-card{
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .25rem;
+  min-height: 100px;
+  transition: all .15s;
+}
+.bingo-card:hover:not(:disabled){
+  border-color: var(--primary);
+  transform: scale(1.03);
+}
+.bingo-card.correct{ border-color: var(--ok); background: #d1fae5; }
+.bingo-card.wrong{ border-color: var(--err); background: #fee2e2; }
+
+/* === CV3: Spoj počet s číslem === */
+.spoj-board{
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: .8rem;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.spoj-left, .spoj-right{
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+.spoj-item{
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--r);
+  padding: .6rem;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  transition: all .15s;
+  user-select: none;
+}
+.spoj-item:hover:not(.matched):not(.selected){ border-color: var(--primary); }
+.spoj-item.selected{
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.spoj-item.matched{
+  background: var(--ok);
+  color: white;
+  border-color: var(--ok);
+  cursor: default;
+}
+.spoj-tečky{
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+.spoj-mid{
+  text-align: center;
+  font-size: .85rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+/* === HOTOVO VIEW === */
+.done-wrap{
+  text-align: center;
+  padding: 3rem 1rem;
+}
+.done-icon{ font-size: 5rem; margin-bottom: 1rem; }
+.done-title{
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: .5rem;
+}
+.done-desc{
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+}
+.done-points-anim{
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--orange);
+  margin: 1rem 0;
+  animation: pop .8s ease-out;
+}
+@keyframes pop {
+  0% { transform: scale(.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.done-actions{
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.btn{
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: .85rem 1.8rem;
+  border-radius: 99px;
+  border: 2px solid;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.btn-primary{
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.btn-primary:hover{ background: var(--primary-dark); transform: translateY(-2px); }
+.btn-secondary{
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn-secondary:hover{ border-color: var(--primary); color: var(--primary); }
+
+/* === Pokrok === */
+.progress-bar{
+  height: 8px;
+  background: var(--primary-light);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.progress-fill{
+  height: 100%;
+  background: var(--primary);
+  transition: width .4s;
+  width: 0%;
+}
+
+/* Footer */
+.footer{
+  margin-top: 5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 1rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+.footer-logo{
+  width: 36px;
+  height: 47px;
+  object-fit: contain;
+  margin-bottom: .8rem;
+  opacity: .5;
+}
+.footer b{ color: var(--ink-soft); font-weight: 700; }
+.footer a{ color: var(--blue); text-decoration: none; }
+
+@media (max-width: 600px){
+  html{ font-size: 16px; }
+  .app{ padding: 0 1rem 4rem; }
+  .topbar-inner{ padding: .65rem 1rem; }
+  .hero{ padding: 1.5rem .5rem 1rem; }
+  .hero-title{ font-size: 1.8rem; }
+  .hero-icon{ font-size: 3rem; }
+  .akvarium{ font-size: 1.8rem; min-height: 80px; }
+  .bingo-card{ font-size: 1.4rem; min-height: 80px; }
+  .spoj-board{ grid-template-columns: 1fr 50px 1fr; gap: .5rem; }
+  .spoj-item{ font-size: 1.2rem; padding: .5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand-mark">
+      <img class="brand-logo" src="logo.png" alt="Lingua Universal">
+      <div class="brand-text">
+        <span class="brand-name">Lingua</span>
+        <span class="brand-sub">Předškolák</span>
+      </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-section">
+      <span class="section-dot"></span>
+      <span>🔢 Předmatematické</span>
+    </div>
+  </div>
+</div>
+
+<main class="app">
+
+  <!-- ═══ MENU: výběr cvičení ═══ -->
+  <div class="view active" id="view-menu">
+    <section class="hero">
+      <span class="hero-icon">🔢</span>
+      <h1 class="hero-title">Předmatematické <em>představy</em></h1>
+      <p class="hero-desc">Vyber si, co budeš dnes dělat.</p>
+    </section>
+
+    <div class="score-bar">
+      <span class="score-num" id="total-points">0</span>
+      <span class="score-label">hvězdiček</span>
+    </div>
+
+    <div class="cviceni-list">
+      <button class="cv-card" onclick="startCv('vic-ryb')">
+        <div class="cv-icon">🐠</div>
+        <div class="cv-content">
+          <div class="cv-title">Kde je víc?</div>
+          <div class="cv-desc">Klikni na akvárium, kde plave víc rybiček</div>
+        </div>
+        <div class="cv-stars" data-cv="vic-ryb"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('bingo')">
+        <div class="cv-icon">🎲</div>
+        <div class="cv-content">
+          <div class="cv-title">Bingo s tečkami</div>
+          <div class="cv-desc">Klikni na pole, které má daný počet teček</div>
+        </div>
+        <div class="cv-stars" data-cv="bingo"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('spoj')">
+        <div class="cv-icon">🔢</div>
+        <div class="cv-content">
+          <div class="cv-title">Spoj počet s číslem</div>
+          <div class="cv-desc">Klikni na tečky a pak na číslo</div>
+        </div>
+        <div class="cv-stars" data-cv="spoj"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══ CV: Více ryb ═══ -->
+  <div class="view" id="view-vic-ryb">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-vr"></div></div>
+    <div class="zadani">Klikni na akvárium, kde je víc rybiček 🐠</div>
+    <div class="akvarium-row" id="akvarium-row"></div>
+  </div>
+
+  <!-- ═══ CV: Bingo ═══ -->
+  <div class="view" id="view-bingo">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-bg"></div></div>
+    <div class="zadani" id="bingo-zadani">Klikni na <b style="color:var(--primary)">3</b> tečky</div>
+    <div class="bingo-grid" id="bingo-grid"></div>
+  </div>
+
+  <!-- ═══ CV: Spoj === -->
+  <div class="view" id="view-spoj">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="zadani">Klikni na tečky, pak na správné číslo</div>
+    <div class="spoj-board" id="spoj-board">
+      <div class="spoj-left" id="spoj-left"></div>
+      <div class="spoj-mid">⟷</div>
+      <div class="spoj-right" id="spoj-right"></div>
+    </div>
+  </div>
+
+  <!-- ═══ HOTOVO ═══ -->
+  <div class="view" id="view-done">
+    <div class="done-wrap">
+      <div class="done-icon" id="done-icon">🎉</div>
+      <h2 class="done-title" id="done-title">Výborně!</h2>
+      <div class="done-points-anim">+<span id="done-pts">0</span> ⭐</div>
+      <p class="done-desc" id="done-desc">Zvládla jsi to skvěle.</p>
+      <div class="done-actions">
+        <button class="btn btn-primary" onclick="repeatCv()">Hrát znovu</button>
+        <button class="btn btn-secondary" onclick="backToMenu()">Zpět na cvičení</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <img class="footer-logo" src="logo.png" alt="Lingua Universal">
+    <div><b>ZŠ a MŠ Lingua Universal</b></div>
+    <div>Sovova 480/2, 412 01 Litoměřice</div>
+    <div style="margin-top:.5rem">
+      <a href="index.html">← Zpět na úvod</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+/* === BODOVÝ SYSTÉM === */
+const SCORE_KEY = 'lingua-predskolak-predmat-v1';
+
+function loadScore(){
+  try { const s = localStorage.getItem(SCORE_KEY); if(s) return JSON.parse(s); } catch(e){}
+  return {total: 0, cv: {}};
+}
+function saveScore(s){ try { localStorage.setItem(SCORE_KEY, JSON.stringify(s)); } catch(e){} }
+
+function addPoints(cvId, pts){
+  const s = loadScore();
+  s.total = (s.total || 0) + pts;
+  s.cv = s.cv || {};
+  s.cv[cvId] = (s.cv[cvId] || 0) + pts;
+  saveScore(s);
+}
+
+function getCvStars(cvId){
+  const s = loadScore();
+  const pts = (s.cv && s.cv[cvId]) || 0;
+  if(pts >= 30) return '⭐⭐⭐';
+  if(pts >= 15) return '⭐⭐';
+  if(pts >= 5) return '⭐';
+  return '';
+}
+
+function renderTotalPoints(){
+  document.getElementById('total-points').textContent = loadScore().total;
+  document.querySelectorAll('.cv-stars').forEach(el => {
+    el.textContent = getCvStars(el.dataset.cv);
+  });
+}
+
+/* === ROUTING === */
+let currentCv = null;
+let session = null;
+
+function $(id){ return document.getElementById(id); }
+function goView(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  $('view-' + id).classList.add('active');
+  window.scrollTo({top:0});
+}
+
+function backToMenu(){
+  currentCv = null;
+  session = null;
+  goView('menu');
+  renderTotalPoints();
+}
+
+function startCv(id){
+  currentCv = id;
+  if(id === 'vic-ryb') startVicRyb();
+  else if(id === 'bingo') startBingo();
+  else if(id === 'spoj') startSpoj();
+}
+
+function repeatCv(){
+  if(currentCv) startCv(currentCv);
+}
+
+function shuffle(a){
+  const b = a.slice();
+  for(let i = b.length-1; i > 0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 1: KDE JE VÍC RYB
+═══════════════════════════════════════════════════ */
+function startVicRyb(){
+  // 6 kol — vždy 2 akvária s různým počtem ryb
+  const kola = [];
+  for(let i = 0; i < 6; i++){
+    let a = Math.floor(Math.random()*7) + 1;  // 1-7
+    let b = Math.floor(Math.random()*7) + 1;
+    while(a === b) b = Math.floor(Math.random()*7) + 1;
+    kola.push({a, b, correct: a > b ? 0 : 1});
+  }
+  session = {kola, idx: 0, correct: 0, locked: false};
+  goView('vic-ryb');
+  renderVicRyb();
+}
+
+function renderVicRyb(){
+  if(session.idx >= session.kola.length){
+    finishCv(session.correct, session.kola.length, 2);  // 2 body za kolo
+    return;
+  }
+  $('pf-vr').style.width = ((session.idx) / session.kola.length * 100) + '%';
+  const kolo = session.kola[session.idx];
+  const row = $('akvarium-row');
+  row.innerHTML = '';
+
+  [kolo.a, kolo.b].forEach((count, idx) => {
+    const div = document.createElement('button');
+    div.className = 'akvarium';
+    div.disabled = false;
+    div.style.background = 'var(--surface)';
+    div.innerHTML = '🐠'.repeat(count);
+    div.onclick = () => {
+      if(session.locked) return;
+      session.locked = true;
+      if(idx === kolo.correct){
+        div.classList.add('correct');
+        session.correct++;
+      } else {
+        div.classList.add('wrong');
+        // Označit správné
+        row.children[kolo.correct].classList.add('correct');
+      }
+      setTimeout(() => {
+        session.idx++;
+        session.locked = false;
+        renderVicRyb();
+      }, 900);
+    };
+    row.appendChild(div);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 2: BINGO TEČKY
+═══════════════════════════════════════════════════ */
+function startBingo(){
+  // 5 kol - vždy 4 možnosti, 1 správná
+  const kola = [];
+  for(let k = 0; k < 5; k++){
+    const target = Math.floor(Math.random()*5) + 2;  // 2-6 teček
+    const opts = [target];
+    while(opts.length < 4){
+      const o = Math.floor(Math.random()*7) + 1;
+      if(!opts.includes(o)) opts.push(o);
+    }
+    kola.push({target, options: shuffle(opts)});
+  }
+  session = {kola, idx: 0, correct: 0, locked: false};
+  goView('bingo');
+  renderBingo();
+}
+
+function renderBingo(){
+  if(session.idx >= session.kola.length){
+    finishCv(session.correct, session.kola.length, 3);  // 3 body za kolo
+    return;
+  }
+  $('pf-bg').style.width = ((session.idx) / session.kola.length * 100) + '%';
+  const kolo = session.kola[session.idx];
+  $('bingo-zadani').innerHTML = `Klikni na <b style="color:var(--primary)">${kolo.target}</b> teček`;
+
+  const grid = $('bingo-grid');
+  grid.innerHTML = '';
+  kolo.options.forEach(count => {
+    const btn = document.createElement('button');
+    btn.className = 'bingo-card';
+    btn.innerHTML = '⚫'.repeat(count);
+    btn.onclick = () => {
+      if(session.locked) return;
+      session.locked = true;
+      if(count === kolo.target){
+        btn.classList.add('correct');
+        session.correct++;
+      } else {
+        btn.classList.add('wrong');
+        // Označit správnou
+        grid.querySelectorAll('.bingo-card').forEach(b => {
+          if(b.textContent.length === kolo.target) b.classList.add('correct');
+        });
+      }
+      setTimeout(() => {
+        session.idx++;
+        session.locked = false;
+        renderBingo();
+      }, 900);
+    };
+    grid.appendChild(btn);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 3: SPOJ TEČKY S ČÍSLEM
+═══════════════════════════════════════════════════ */
+function startSpoj(){
+  // 5 dvojic
+  const cisla = shuffle([1,2,3,4,5,6,7,8,9,10]).slice(0, 5);
+  session = {
+    pairs: cisla,
+    matched: new Set(),
+    selected: null,
+    leftOrder: shuffle(cisla),
+    rightOrder: shuffle(cisla)
+  };
+  goView('spoj');
+  renderSpoj();
+}
+
+function renderSpoj(){
+  const left = $('spoj-left');
+  const right = $('spoj-right');
+  left.innerHTML = '';
+  right.innerHTML = '';
+
+  session.leftOrder.forEach(num => {
+    const item = document.createElement('div');
+    item.className = 'spoj-item';
+    item.dataset.num = num;
+    item.dataset.side = 'left';
+    item.innerHTML = `<span class="spoj-tečky">${'⚫'.repeat(num)}</span>`;
+    if(session.matched.has(num)) item.classList.add('matched');
+    item.onclick = () => spojClick(item, num, 'left');
+    left.appendChild(item);
+  });
+
+  session.rightOrder.forEach(num => {
+    const item = document.createElement('div');
+    item.className = 'spoj-item';
+    item.dataset.num = num;
+    item.dataset.side = 'right';
+    item.textContent = num;
+    if(session.matched.has(num)) item.classList.add('matched');
+    item.onclick = () => spojClick(item, num, 'right');
+    right.appendChild(item);
+  });
+}
+
+function spojClick(item, num, side){
+  if(item.classList.contains('matched')) return;
+
+  // Odstranit předchozí selection
+  if(session.selected){
+    document.querySelectorAll('.spoj-item.selected').forEach(el => el.classList.remove('selected'));
+  }
+
+  if(!session.selected){
+    item.classList.add('selected');
+    session.selected = {num, side, el: item};
+    return;
+  }
+
+  // Druhý click
+  if(session.selected.side === side){
+    // Stejná strana - jen přepneme selection
+    item.classList.add('selected');
+    session.selected = {num, side, el: item};
+    return;
+  }
+
+  // Match?
+  if(session.selected.num === num){
+    session.matched.add(num);
+    session.selected.el.classList.add('matched');
+    item.classList.add('matched');
+    session.selected.el.classList.remove('selected');
+    session.selected = null;
+
+    if(session.matched.size === session.pairs.length){
+      setTimeout(() => {
+        finishCv(session.pairs.length, session.pairs.length, 3);
+      }, 600);
+    }
+  } else {
+    // Špatně - chvíli červené, pak reset
+    item.classList.add('wrong');
+    session.selected.el.classList.add('wrong');
+    setTimeout(() => {
+      item.classList.remove('wrong', 'selected');
+      session.selected.el.classList.remove('wrong', 'selected');
+      session.selected = null;
+    }, 700);
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   FINISH
+═══════════════════════════════════════════════════ */
+function finishCv(correct, total, ptsPerCorrect){
+  const pts = correct * ptsPerCorrect + (correct === total ? 5 : 0);  // bonus 5 za 100%
+  if(currentCv) addPoints(currentCv, pts);
+
+  const pct = correct / total;
+  let title, icon, desc;
+  if(pct === 1){
+    title = 'Skvělá práce!';
+    icon = '🏆';
+    desc = `Všechno správně — ${correct} z ${total}!`;
+  } else if(pct >= 0.7){
+    title = 'Velmi dobře!';
+    icon = '🎉';
+    desc = `Správně jsi měl/a ${correct} z ${total}.`;
+  } else {
+    title = 'Dobrý pokus!';
+    icon = '💪';
+    desc = `Správně ${correct} z ${total}. Zkus to znovu!`;
+  }
+
+  $('done-title').textContent = title;
+  $('done-icon').textContent = icon;
+  $('done-desc').textContent = desc;
+  $('done-pts').textContent = pts;
+  goView('done');
+}
+
+/* === INIT === */
+renderTotalPoints();
+</script>
+</body>
+</html>
