@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sluchové vnímání · Lingua předškolák</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root{
+  --bg: #f0fdf4;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-muted: #94a3b8;
+  --line: #e2e8f0;
+  --line-soft: #f1f5f9;
+
+  --primary: #10b981;       /* zelená pro sluchové */
+  --primary-dark: #059669;
+  --primary-light: #d1fae5;
+  --primary-border: #a7f3d0;
+
+  --orange: #ffaa37;
+  --ok: #10b981;
+  --err: #ef4444;
+
+  --font: 'Barlow Condensed', -apple-system, sans-serif;
+  --r: 12px;
+  --rl: 20px;
+  --shadow: 0 4px 16px rgba(16, 185, 129, .12);
+  --shadow-lg: 0 12px 40px rgba(16, 185, 129, .18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:18px;}
+body{
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  font-weight: 500;
+}
+
+.topbar{
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: .8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.brand-mark{
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand-logo{ width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
+.brand-text{ display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name{ font-size: 1.35rem; font-weight: 700; }
+.brand-sub{
+  font-size: .78rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.topbar-spacer{flex:1;}
+.topbar-section{
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  padding: .4rem 1rem;
+  background: var(--primary-light);
+  border-radius: 99px;
+  border: 1px solid var(--primary-border);
+}
+.section-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: inline-block;
+}
+
+.app{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+}
+
+.view{ display: none; }
+.view.active{ display: block; }
+
+.hero{
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem;
+}
+.hero-icon{
+  font-size: 4rem;
+  display: block;
+  margin-bottom: .5rem;
+  line-height: 1;
+}
+.hero-title{
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.hero-title em{
+  font-style: italic;
+  color: var(--primary);
+}
+.hero-desc{
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  margin-top: .5rem;
+}
+
+.audio-warn{
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: .8rem 1rem;
+  border-radius: var(--r);
+  margin: 0 auto 1.5rem;
+  max-width: 540px;
+  text-align: center;
+  font-size: .95rem;
+  display: none;
+}
+
+.score-bar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: .8rem 1.5rem;
+  margin: 0 auto 2rem;
+  max-width: 480px;
+  box-shadow: var(--shadow);
+}
+.score-num{
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+.score-label{
+  font-size: .9rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.cviceni-list{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .85rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.cv-card{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  transition: all .15s;
+  width: 100%;
+}
+.cv-card:hover{
+  border-color: var(--primary);
+  transform: translateX(4px);
+  box-shadow: var(--shadow);
+}
+.cv-icon{
+  font-size: 2rem;
+  width: 56px;
+  height: 56px;
+  background: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cv-content{ flex: 1; }
+.cv-title{ font-size: 1.3rem; font-weight: 800; }
+.cv-desc{
+  font-size: .92rem;
+  color: var(--ink-soft);
+  margin-top: .15rem;
+}
+.cv-stars{
+  font-size: 1rem;
+  color: var(--orange);
+  letter-spacing: .1em;
+  flex-shrink: 0;
+}
+.cv-arrow{
+  font-size: 1.5rem;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.back-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: .55rem 1.2rem;
+  border-radius: 99px;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+.back-btn:hover{ border-color: var(--primary); color: var(--primary); }
+
+.zadani-card{
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.zadani-label{
+  font-size: .85rem;
+  color: var(--ink-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  margin-bottom: .8rem;
+}
+.listen-btn{
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-family: var(--font);
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 1.2rem 2.2rem;
+  border-radius: 99px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  box-shadow: var(--shadow);
+  transition: all .15s;
+}
+.listen-btn:hover{
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+.listen-btn.playing{ animation: pulse 0.6s; }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.progress-bar{
+  height: 8px;
+  background: var(--primary-light);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.progress-fill{
+  height: 100%;
+  background: var(--primary);
+  transition: width .4s;
+  width: 0%;
+}
+
+/* === OPTIONS GRID (4 obrázky/možnosti) === */
+.options-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.option-emoji{
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+  cursor: pointer;
+  font-size: 4rem;
+  text-align: center;
+  line-height: 1;
+  transition: all .15s;
+  font-family: var(--font);
+}
+.option-emoji:hover:not(:disabled){
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+.option-emoji.correct{
+  background: #d1fae5;
+  border-color: var(--ok);
+  animation: bounce .5s;
+}
+.option-emoji.wrong{
+  background: #fee2e2;
+  border-color: var(--err);
+  animation: shake .4s;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* === SLABIKY: čísla === */
+.slabiky-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.slabiky-num{
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+  cursor: pointer;
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1;
+  color: var(--primary);
+  transition: all .15s;
+  font-family: var(--font);
+}
+.slabiky-num:hover:not(:disabled){
+  border-color: var(--primary);
+  transform: scale(1.08);
+}
+.slabiky-num.correct{
+  background: #d1fae5;
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.slabiky-num.wrong{
+  background: #fee2e2;
+  border-color: var(--err);
+  color: var(--err);
+  animation: shake .4s;
+}
+.slabiky-num small{
+  display: block;
+  font-size: .85rem;
+  color: var(--ink-muted);
+  margin-top: .3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* === KRÁTKÁ/DLOUHÁ ===*/
+.kd-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.kd-btn{
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: var(--rl);
+  padding: 2rem 1rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  transition: all .15s;
+  font-family: var(--font);
+}
+.kd-btn:hover:not(:disabled){
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+.kd-btn-icon{
+  font-size: 2rem;
+  display: block;
+  margin-bottom: .5rem;
+}
+.kd-btn.correct{ background: #d1fae5; border-color: var(--ok); }
+.kd-btn.wrong{ background: #fee2e2; border-color: var(--err); animation: shake .4s; }
+
+/* Hint - opakovat */
+.repeat-hint{
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--ink-soft);
+  font-size: .95rem;
+}
+.repeat-btn{
+  background: none;
+  border: 2px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: .5rem 1.2rem;
+  border-radius: 99px;
+  cursor: pointer;
+  margin-top: .5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+.repeat-btn:hover{ border-color: var(--primary); color: var(--primary); }
+
+/* === HOTOVO === */
+.done-wrap{
+  text-align: center;
+  padding: 3rem 1rem;
+}
+.done-icon{ font-size: 5rem; margin-bottom: 1rem; }
+.done-title{
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: .5rem;
+}
+.done-points-anim{
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--orange);
+  margin: 1rem 0;
+  animation: pop .8s ease-out;
+}
+@keyframes pop {
+  0% { transform: scale(.5); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.done-desc{
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+}
+.done-actions{
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.btn{
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: .85rem 1.8rem;
+  border-radius: 99px;
+  border: 2px solid;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-primary{
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.btn-primary:hover{ background: var(--primary-dark); }
+.btn-secondary{
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn-secondary:hover{ border-color: var(--primary); color: var(--primary); }
+
+.footer{
+  margin-top: 5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 1rem;
+  color: var(--ink-muted);
+}
+.footer-logo{ width: 36px; height: 47px; object-fit: contain; margin-bottom: .8rem; opacity: .5; }
+.footer b{ color: var(--ink-soft); font-weight: 700; }
+.footer a{ color: var(--primary); text-decoration: none; }
+
+@media (max-width: 600px){
+  html{ font-size: 16px; }
+  .app{ padding: 0 1rem 4rem; }
+  .topbar-inner{ padding: .65rem 1rem; }
+  .hero{ padding: 1.5rem .5rem 1rem; }
+  .hero-title{ font-size: 1.8rem; }
+  .hero-icon{ font-size: 3rem; }
+  .listen-btn{ font-size: 1.1rem; padding: 1rem 1.5rem; }
+  .option-emoji{ font-size: 3rem; padding: 1rem; }
+  .slabiky-num{ font-size: 2.5rem; padding: 1rem; }
+  .slabiky-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand-mark">
+      <img class="brand-logo" src="logo.png" alt="Lingua Universal">
+      <div class="brand-text">
+        <span class="brand-name">Lingua</span>
+        <span class="brand-sub">Předškolák</span>
+      </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-section">
+      <span class="section-dot"></span>
+      <span>👂 Sluchové vnímání</span>
+    </div>
+  </div>
+</div>
+
+<main class="app">
+
+  <!-- ═══ MENU ═══ -->
+  <div class="view active" id="view-menu">
+    <section class="hero">
+      <span class="hero-icon">👂</span>
+      <h1 class="hero-title">Sluchové <em>vnímání</em></h1>
+      <p class="hero-desc">Poslouchej a klikni na správnou odpověď.</p>
+    </section>
+
+    <div class="audio-warn" id="audio-warn">
+      ⚠️ Tvůj prohlížeč neumí přehrávat zvuk. Zkus Chrome, Edge nebo Safari.
+    </div>
+
+    <div class="score-bar">
+      <span class="score-num" id="total-points">0</span>
+      <span class="score-label">hvězdiček</span>
+    </div>
+
+    <div class="cviceni-list">
+      <button class="cv-card" onclick="startCv('prvni-pismeno')">
+        <div class="cv-icon">🔤</div>
+        <div class="cv-content">
+          <div class="cv-title">První písmeno</div>
+          <div class="cv-desc">Slyšíš slovo. Klikni na obrázek, který začíná stejným písmenem.</div>
+        </div>
+        <div class="cv-stars" data-cv="prvni-pismeno"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('rymy')">
+        <div class="cv-icon">🎵</div>
+        <div class="cv-content">
+          <div class="cv-title">Rýmy</div>
+          <div class="cv-desc">Slyšíš slovo. Klikni na obrázek, který se s ním rýmuje.</div>
+        </div>
+        <div class="cv-stars" data-cv="rymy"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('slabiky')">
+        <div class="cv-icon">🥁</div>
+        <div class="cv-content">
+          <div class="cv-title">Počty slabik</div>
+          <div class="cv-desc">Slyšíš slovo. Klikni na číslo — kolik má slabik?</div>
+        </div>
+        <div class="cv-stars" data-cv="slabiky"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('kratka-dlouha')">
+        <div class="cv-icon">📏</div>
+        <div class="cv-content">
+          <div class="cv-title">Krátká nebo dlouhá?</div>
+          <div class="cv-desc">Slyšíš slovo. Má krátkou nebo dlouhou slabiku?</div>
+        </div>
+        <div class="cv-stars" data-cv="kratka-dlouha"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══ CV: První písmeno ═══ -->
+  <div class="view" id="view-prvni-pismeno">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-pp"></div></div>
+    <div class="zadani-card">
+      <div class="zadani-label">Poslechni si slovo</div>
+      <button class="listen-btn" id="listen-pp" onclick="listenCurrent()">
+        🔊 Poslechnout
+      </button>
+    </div>
+    <p style="text-align:center;color:var(--ink-soft);margin-bottom:1rem;font-weight:600">
+      Klikni na obrázek, který začíná stejným písmenem:
+    </p>
+    <div class="options-grid" id="opts-pp"></div>
+  </div>
+
+  <!-- ═══ CV: Rýmy ═══ -->
+  <div class="view" id="view-rymy">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-rm"></div></div>
+    <div class="zadani-card">
+      <div class="zadani-label">Poslechni si slovo</div>
+      <button class="listen-btn" id="listen-rm" onclick="listenCurrent()">
+        🔊 Poslechnout
+      </button>
+    </div>
+    <p style="text-align:center;color:var(--ink-soft);margin-bottom:1rem;font-weight:600">
+      Klikni na obrázek, který se rýmuje:
+    </p>
+    <div class="options-grid" id="opts-rm"></div>
+  </div>
+
+  <!-- ═══ CV: Slabiky ═══ -->
+  <div class="view" id="view-slabiky">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-sb"></div></div>
+    <div class="zadani-card">
+      <div class="zadani-label">Poslechni si slovo</div>
+      <button class="listen-btn" id="listen-sb" onclick="listenCurrent()">
+        🔊 Poslechnout
+      </button>
+      <div style="margin-top:1rem;font-size:1.5rem" id="sb-emoji">🐶</div>
+    </div>
+    <p style="text-align:center;color:var(--ink-soft);margin-bottom:1rem;font-weight:600">
+      Kolik má slabik? Tleskej a počítej:
+    </p>
+    <div class="slabiky-grid">
+      <button class="slabiky-num" data-num="1" onclick="answerSlabiky(1, this)">1<small>slabika</small></button>
+      <button class="slabiky-num" data-num="2" onclick="answerSlabiky(2, this)">2<small>slabiky</small></button>
+      <button class="slabiky-num" data-num="3" onclick="answerSlabiky(3, this)">3<small>slabiky</small></button>
+      <button class="slabiky-num" data-num="4" onclick="answerSlabiky(4, this)">4<small>slabiky</small></button>
+    </div>
+  </div>
+
+  <!-- ═══ CV: Krátká/dlouhá ═══ -->
+  <div class="view" id="view-kratka-dlouha">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-kd"></div></div>
+    <div class="zadani-card">
+      <div class="zadani-label">Poslechni si slovo</div>
+      <button class="listen-btn" id="listen-kd" onclick="listenCurrent()">
+        🔊 Poslechnout
+      </button>
+      <div style="margin-top:1rem;font-size:2rem" id="kd-emoji">🦓</div>
+    </div>
+    <p style="text-align:center;color:var(--ink-soft);margin-bottom:1rem;font-weight:600">
+      Má slovo krátkou (a, e, i...) nebo dlouhou (á, é, í...) slabiku?
+    </p>
+    <div class="kd-grid">
+      <button class="kd-btn" data-typ="kratka" onclick="answerKD('kratka', this)">
+        <span class="kd-btn-icon">🔵</span>
+        Krátká
+      </button>
+      <button class="kd-btn" data-typ="dlouha" onclick="answerKD('dlouha', this)">
+        <span class="kd-btn-icon">🟠</span>
+        Dlouhá
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ HOTOVO ═══ -->
+  <div class="view" id="view-done">
+    <div class="done-wrap">
+      <div class="done-icon" id="done-icon">🎉</div>
+      <h2 class="done-title" id="done-title">Výborně!</h2>
+      <div class="done-points-anim">+<span id="done-pts">0</span> ⭐</div>
+      <p class="done-desc" id="done-desc">Zvládla jsi to skvěle.</p>
+      <div class="done-actions">
+        <button class="btn btn-primary" onclick="repeatCv()">Hrát znovu</button>
+        <button class="btn btn-secondary" onclick="backToMenu()">Zpět</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <img class="footer-logo" src="logo.png" alt="Lingua Universal">
+    <div><b>ZŠ a MŠ Lingua Universal</b></div>
+    <div>Sovova 480/2, 412 01 Litoměřice</div>
+    <div style="margin-top:.5rem">
+      <a href="index.html">← Zpět na úvod</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+/* === DATA === */
+
+// Slovní zásoba s emoji a metadaty
+// pismeno = první písmeno (pro CV1)
+// slabiky = počet slabik (pro CV3)
+// rym = skupina rýmu (pro CV2 - slova ve stejné skupině se rýmují)
+// dlouha = true pokud má dlouhou slabiku (pro CV4)
+const SLOVNIK = [
+  // A - krátká
+  {slovo: 'auto', emoji: '🚗', pismeno: 'A', slabiky: 2, rym: 'auto', dlouha: false},
+  {slovo: 'ananas', emoji: '🍍', pismeno: 'A', slabiky: 3, rym: 'ananas', dlouha: false},
+  // B
+  {slovo: 'banán', emoji: '🍌', pismeno: 'B', slabiky: 2, rym: 'an', dlouha: true},
+  {slovo: 'balon', emoji: '🎈', pismeno: 'B', slabiky: 2, rym: 'on', dlouha: false},
+  // D
+  {slovo: 'dům', emoji: '🏠', pismeno: 'D', slabiky: 1, rym: 'um', dlouha: true},
+  {slovo: 'dort', emoji: '🍰', pismeno: 'D', slabiky: 1, rym: 'ort', dlouha: false},
+  // H
+  {slovo: 'hrad', emoji: '🏰', pismeno: 'H', slabiky: 1, rym: 'ad', dlouha: false},
+  {slovo: 'had', emoji: '🐍', pismeno: 'H', slabiky: 1, rym: 'ad', dlouha: false},
+  {slovo: 'hodiny', emoji: '⏰', pismeno: 'H', slabiky: 3, rym: 'iny', dlouha: false},
+  // J
+  {slovo: 'jablko', emoji: '🍎', pismeno: 'J', slabiky: 3, rym: 'ko', dlouha: false},
+  {slovo: 'ježek', emoji: '🦔', pismeno: 'J', slabiky: 2, rym: 'ezek', dlouha: false},
+  // K
+  {slovo: 'klíč', emoji: '🔑', pismeno: 'K', slabiky: 1, rym: 'íč', dlouha: true},
+  {slovo: 'kočka', emoji: '🐱', pismeno: 'K', slabiky: 2, rym: 'očka', dlouha: false},
+  {slovo: 'kniha', emoji: '📕', pismeno: 'K', slabiky: 2, rym: 'iha', dlouha: false},
+  {slovo: 'kolo', emoji: '🚲', pismeno: 'K', slabiky: 2, rym: 'olo', dlouha: false},
+  // L
+  {slovo: 'lev', emoji: '🦁', pismeno: 'L', slabiky: 1, rym: 'ev', dlouha: false},
+  {slovo: 'liška', emoji: '🦊', pismeno: 'L', slabiky: 2, rym: 'ška', dlouha: false},
+  {slovo: 'list', emoji: '🍃', pismeno: 'L', slabiky: 1, rym: 'ist', dlouha: false},
+  // M
+  {slovo: 'míč', emoji: '⚽', pismeno: 'M', slabiky: 1, rym: 'íč', dlouha: true},
+  {slovo: 'myš', emoji: '🐭', pismeno: 'M', slabiky: 1, rym: 'yš', dlouha: false},
+  {slovo: 'maso', emoji: '🥩', pismeno: 'M', slabiky: 2, rym: 'aso', dlouha: false},
+  // N
+  {slovo: 'nos', emoji: '👃', pismeno: 'N', slabiky: 1, rym: 'os', dlouha: false},
+  {slovo: 'noha', emoji: '🦵', pismeno: 'N', slabiky: 2, rym: 'oha', dlouha: false},
+  // O
+  {slovo: 'oko', emoji: '👁️', pismeno: 'O', slabiky: 2, rym: 'oko', dlouha: false},
+  {slovo: 'ovce', emoji: '🐑', pismeno: 'O', slabiky: 2, rym: 'ovce', dlouha: false},
+  // P
+  {slovo: 'pes', emoji: '🐶', pismeno: 'P', slabiky: 1, rym: 'es', dlouha: false},
+  {slovo: 'pizza', emoji: '🍕', pismeno: 'P', slabiky: 2, rym: 'icca', dlouha: false},
+  {slovo: 'panda', emoji: '🐼', pismeno: 'P', slabiky: 2, rym: 'anda', dlouha: false},
+  // R
+  {slovo: 'ryba', emoji: '🐟', pismeno: 'R', slabiky: 2, rym: 'yba', dlouha: false},
+  {slovo: 'růže', emoji: '🌹', pismeno: 'R', slabiky: 2, rym: 'uze', dlouha: true},
+  // S
+  {slovo: 'srdce', emoji: '❤️', pismeno: 'S', slabiky: 2, rym: 'rdce', dlouha: false},
+  {slovo: 'slunce', emoji: '☀️', pismeno: 'S', slabiky: 2, rym: 'unce', dlouha: false},
+  {slovo: 'sova', emoji: '🦉', pismeno: 'S', slabiky: 2, rym: 'ova', dlouha: false},
+  {slovo: 'strom', emoji: '🌳', pismeno: 'S', slabiky: 1, rym: 'rom', dlouha: false},
+  // T
+  {slovo: 'tygr', emoji: '🐯', pismeno: 'T', slabiky: 1, rym: 'gr', dlouha: false},
+  {slovo: 'taška', emoji: '🎒', pismeno: 'T', slabiky: 2, rym: 'ška', dlouha: false},
+  // V
+  {slovo: 'vlak', emoji: '🚂', pismeno: 'V', slabiky: 1, rym: 'ak', dlouha: false},
+  {slovo: 'voda', emoji: '💧', pismeno: 'V', slabiky: 2, rym: 'oda', dlouha: false},
+  {slovo: 'včela', emoji: '🐝', pismeno: 'V', slabiky: 2, rym: 'ela', dlouha: false},
+  // Z
+  {slovo: 'zebra', emoji: '🦓', pismeno: 'Z', slabiky: 2, rym: 'ebra', dlouha: false},
+  {slovo: 'zajíc', emoji: '🐰', pismeno: 'Z', slabiky: 2, rym: 'íc', dlouha: true},
+  // Č
+  {slovo: 'čáp', emoji: '🦤', pismeno: 'Č', slabiky: 1, rym: 'áp', dlouha: true},
+  // Ž
+  {slovo: 'žába', emoji: '🐸', pismeno: 'Ž', slabiky: 2, rym: 'ába', dlouha: true},
+  {slovo: 'žirafa', emoji: '🦒', pismeno: 'Ž', slabiky: 3, rym: 'afa', dlouha: false},
+  // dlouhé
+  {slovo: 'mléko', emoji: '🥛', pismeno: 'M', slabiky: 2, rym: 'éko', dlouha: true},
+  {slovo: 'káva', emoji: '☕', pismeno: 'K', slabiky: 2, rym: 'áva', dlouha: true},
+  {slovo: 'sýr', emoji: '🧀', pismeno: 'S', slabiky: 1, rym: 'ýr', dlouha: true},
+  {slovo: 'pávek', emoji: '🦚', pismeno: 'P', slabiky: 2, rym: 'ávek', dlouha: true},
+  {slovo: 'lístek', emoji: '🎫', pismeno: 'L', slabiky: 2, rym: 'ístek', dlouha: true},
+  {slovo: 'džus', emoji: '🧃', pismeno: 'D', slabiky: 1, rym: 'us', dlouha: false}
+];
+
+/* === AUDIO === */
+const supportsSpeech = 'speechSynthesis' in window;
+let czechVoice = null;
+
+function initSpeech(){
+  if(!supportsSpeech){
+    document.getElementById('audio-warn').style.display = 'block';
+    return;
+  }
+  function loadVoices(){
+    const voices = speechSynthesis.getVoices();
+    const csVoices = voices.filter(v => v.lang.startsWith('cs'));
+    if(csVoices.length > 0){
+      czechVoice = csVoices.find(v => v.localService) || csVoices[0];
+    }
+  }
+  loadVoices();
+  if(speechSynthesis.onvoiceschanged !== undefined){
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
+}
+initSpeech();
+
+function speakCs(text, btn){
+  if(!supportsSpeech) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'cs-CZ';
+  utt.rate = 0.85;  // pomaleji pro děti
+  utt.pitch = 1.0;
+  if(czechVoice) utt.voice = czechVoice;
+  if(btn){
+    btn.classList.add('playing');
+    utt.onend = () => btn.classList.remove('playing');
+    utt.onerror = () => btn.classList.remove('playing');
+  }
+  speechSynthesis.speak(utt);
+}
+
+/* === BODY === */
+const SCORE_KEY = 'lingua-predskolak-sluchove-v1';
+
+function loadScore(){
+  try { const s = localStorage.getItem(SCORE_KEY); if(s) return JSON.parse(s); } catch(e){}
+  return {total: 0, cv: {}};
+}
+function saveScore(s){ try { localStorage.setItem(SCORE_KEY, JSON.stringify(s)); } catch(e){} }
+function addPoints(cvId, pts){
+  const s = loadScore();
+  s.total = (s.total || 0) + pts;
+  s.cv = s.cv || {};
+  s.cv[cvId] = (s.cv[cvId] || 0) + pts;
+  saveScore(s);
+}
+function getCvStars(cvId){
+  const s = loadScore();
+  const pts = (s.cv && s.cv[cvId]) || 0;
+  if(pts >= 30) return '⭐⭐⭐';
+  if(pts >= 15) return '⭐⭐';
+  if(pts >= 5) return '⭐';
+  return '';
+}
+function renderTotalPoints(){
+  document.getElementById('total-points').textContent = loadScore().total;
+  document.querySelectorAll('.cv-stars').forEach(el => {
+    el.textContent = getCvStars(el.dataset.cv);
+  });
+}
+
+/* === ROUTING === */
+let currentCv = null;
+let session = null;
+
+function $(id){ return document.getElementById(id); }
+function goView(id){
+  if(supportsSpeech) speechSynthesis.cancel();
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  $('view-' + id).classList.add('active');
+  window.scrollTo({top:0});
+}
+
+function backToMenu(){
+  currentCv = null; session = null;
+  goView('menu');
+  renderTotalPoints();
+}
+
+function startCv(id){
+  currentCv = id;
+  if(id === 'prvni-pismeno') startPrvniPismeno();
+  else if(id === 'rymy') startRymy();
+  else if(id === 'slabiky') startSlabiky();
+  else if(id === 'kratka-dlouha') startKratkaDlouha();
+}
+
+function repeatCv(){ if(currentCv) startCv(currentCv); }
+
+function shuffle(a){
+  const b = a.slice();
+  for(let i = b.length-1; i > 0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+}
+
+function listenCurrent(){
+  if(!session || !session.queue) return;
+  const item = session.queue[session.idx];
+  if(!item) return;
+  // Najdi tlačítko v aktuálním view
+  const activeView = document.querySelector('.view.active');
+  const btn = activeView ? activeView.querySelector('.listen-btn') : null;
+  speakCs(item.target.slovo || item.target, btn);
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 1: PRVNÍ PÍSMENO
+═══════════════════════════════════════════════════ */
+function startPrvniPismeno(){
+  // 6 kol — vyber slovo, pak 3 distraktory s jiným prvním písmenem + 1 se stejným
+  const queue = [];
+  const used = new Set();
+
+  for(let k = 0; k < 6 && queue.length < 6; k++){
+    // Najdi písmeno, které má aspoň 2 různá slova
+    const pismena = [...new Set(SLOVNIK.map(s => s.pismeno))];
+    let pism;
+    let attempt = 0;
+    do {
+      pism = pismena[Math.floor(Math.random() * pismena.length)];
+      attempt++;
+    } while(SLOVNIK.filter(s => s.pismeno === pism).length < 2 && attempt < 20);
+
+    const same = SLOVNIK.filter(s => s.pismeno === pism && !used.has(s.slovo));
+    if(same.length < 2) continue;
+
+    const target = same[Math.floor(Math.random()*same.length)];
+    used.add(target.slovo);
+    const correct = same.filter(s => s.slovo !== target.slovo)[0];
+    if(!correct) continue;
+    used.add(correct.slovo);
+
+    // 3 distraktory s jiným písmenem
+    const others = SLOVNIK.filter(s => s.pismeno !== pism && !used.has(s.slovo));
+    const distractors = shuffle(others).slice(0, 3);
+    distractors.forEach(d => used.add(d.slovo));
+
+    const options = shuffle([correct, ...distractors]);
+    queue.push({target, correct, options});
+  }
+
+  session = {queue, idx: 0, correct: 0, locked: false};
+  goView('prvni-pismeno');
+  renderPrvniPismeno();
+  setTimeout(() => listenCurrent(), 400);
+}
+
+function renderPrvniPismeno(){
+  if(session.idx >= session.queue.length){
+    finishCv(session.correct, session.queue.length, 4);
+    return;
+  }
+  $('pf-pp').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  const kolo = session.queue[session.idx];
+
+  const opts = $('opts-pp');
+  opts.innerHTML = '';
+  kolo.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-emoji';
+    btn.textContent = opt.emoji;
+    btn.title = opt.slovo;
+    btn.onclick = () => {
+      if(session.locked) return;
+      session.locked = true;
+      if(opt.slovo === kolo.correct.slovo){
+        btn.classList.add('correct');
+        session.correct++;
+      } else {
+        btn.classList.add('wrong');
+        opts.querySelectorAll('.option-emoji').forEach(b => {
+          if(b.title === kolo.correct.slovo) b.classList.add('correct');
+        });
+      }
+      // Vyslov správnou odpověď
+      setTimeout(() => speakCs(kolo.correct.slovo), 300);
+      setTimeout(() => {
+        session.idx++;
+        session.locked = false;
+        renderPrvniPismeno();
+        if(session.idx < session.queue.length) setTimeout(() => listenCurrent(), 200);
+      }, 1500);
+    };
+    opts.appendChild(btn);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 2: RÝMY
+═══════════════════════════════════════════════════ */
+function startRymy(){
+  // Najdeme dvojice se stejným rym
+  const rymGroups = {};
+  SLOVNIK.forEach(s => {
+    rymGroups[s.rym] = rymGroups[s.rym] || [];
+    rymGroups[s.rym].push(s);
+  });
+
+  const validGroups = Object.values(rymGroups).filter(g => g.length >= 2);
+
+  const queue = [];
+  const used = new Set();
+  const shuffledGroups = shuffle(validGroups);
+
+  for(const group of shuffledGroups){
+    if(queue.length >= 5) break;
+    const available = group.filter(s => !used.has(s.slovo));
+    if(available.length < 2) continue;
+
+    const target = available[0];
+    const correct = available[1];
+    used.add(target.slovo);
+    used.add(correct.slovo);
+
+    // 3 distraktory s jiným rýmem
+    const others = SLOVNIK.filter(s => s.rym !== target.rym && !used.has(s.slovo));
+    const distractors = shuffle(others).slice(0, 3);
+    distractors.forEach(d => used.add(d.slovo));
+
+    const options = shuffle([correct, ...distractors]);
+    queue.push({target, correct, options});
+  }
+
+  session = {queue, idx: 0, correct: 0, locked: false};
+  goView('rymy');
+  renderRymy();
+  setTimeout(() => listenCurrent(), 400);
+}
+
+function renderRymy(){
+  if(session.idx >= session.queue.length){
+    finishCv(session.correct, session.queue.length, 5);
+    return;
+  }
+  $('pf-rm').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  const kolo = session.queue[session.idx];
+
+  const opts = $('opts-rm');
+  opts.innerHTML = '';
+  kolo.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-emoji';
+    btn.textContent = opt.emoji;
+    btn.title = opt.slovo;
+    btn.onclick = () => {
+      if(session.locked) return;
+      session.locked = true;
+      if(opt.slovo === kolo.correct.slovo){
+        btn.classList.add('correct');
+        session.correct++;
+      } else {
+        btn.classList.add('wrong');
+        opts.querySelectorAll('.option-emoji').forEach(b => {
+          if(b.title === kolo.correct.slovo) b.classList.add('correct');
+        });
+      }
+      setTimeout(() => speakCs(kolo.correct.slovo), 300);
+      setTimeout(() => {
+        session.idx++;
+        session.locked = false;
+        renderRymy();
+        if(session.idx < session.queue.length) setTimeout(() => listenCurrent(), 200);
+      }, 1500);
+    };
+    opts.appendChild(btn);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 3: POČTY SLABIK
+═══════════════════════════════════════════════════ */
+function startSlabiky(){
+  // 8 kol - různé počty slabik 1-4
+  const queue = [];
+  const used = new Set();
+
+  // Pokus se o vyvážený výběr
+  for(const targetCount of [1,2,3,4,1,2,3,2]){
+    const candidates = SLOVNIK.filter(s => s.slabiky === targetCount && !used.has(s.slovo));
+    if(candidates.length === 0) continue;
+    const w = candidates[Math.floor(Math.random()*candidates.length)];
+    used.add(w.slovo);
+    queue.push({target: w});
+  }
+
+  session = {queue: shuffle(queue), idx: 0, correct: 0, locked: false};
+  goView('slabiky');
+  renderSlabiky();
+  setTimeout(() => listenCurrent(), 400);
+}
+
+function renderSlabiky(){
+  if(session.idx >= session.queue.length){
+    finishCv(session.correct, session.queue.length, 4);
+    return;
+  }
+  $('pf-sb').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  const kolo = session.queue[session.idx];
+  $('sb-emoji').textContent = kolo.target.emoji;
+
+  document.querySelectorAll('#view-slabiky .slabiky-num').forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = false;
+  });
+}
+
+function answerSlabiky(num, btn){
+  if(session.locked) return;
+  session.locked = true;
+  const kolo = session.queue[session.idx];
+  if(num === kolo.target.slabiky){
+    btn.classList.add('correct');
+    session.correct++;
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#view-slabiky .slabiky-num').forEach(b => {
+      if(parseInt(b.dataset.num) === kolo.target.slabiky) b.classList.add('correct');
+    });
+  }
+  setTimeout(() => {
+    session.idx++;
+    session.locked = false;
+    renderSlabiky();
+    if(session.idx < session.queue.length) setTimeout(() => listenCurrent(), 300);
+  }, 1500);
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 4: KRÁTKÁ / DLOUHÁ
+═══════════════════════════════════════════════════ */
+function startKratkaDlouha(){
+  // 8 kol - vyvážený mix krátkých a dlouhých slabik
+  const dlouhe = SLOVNIK.filter(s => s.dlouha);
+  const kratke = SLOVNIK.filter(s => !s.dlouha);
+
+  const queue = [];
+  const usedD = shuffle(dlouhe).slice(0, 4);
+  const usedK = shuffle(kratke).slice(0, 4);
+
+  [...usedD, ...usedK].forEach(s => queue.push({target: s}));
+
+  session = {queue: shuffle(queue), idx: 0, correct: 0, locked: false};
+  goView('kratka-dlouha');
+  renderKratkaDlouha();
+  setTimeout(() => listenCurrent(), 400);
+}
+
+function renderKratkaDlouha(){
+  if(session.idx >= session.queue.length){
+    finishCv(session.correct, session.queue.length, 4);
+    return;
+  }
+  $('pf-kd').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  const kolo = session.queue[session.idx];
+  $('kd-emoji').textContent = kolo.target.emoji;
+
+  document.querySelectorAll('#view-kratka-dlouha .kd-btn').forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = false;
+  });
+}
+
+function answerKD(typ, btn){
+  if(session.locked) return;
+  session.locked = true;
+  const kolo = session.queue[session.idx];
+  const correctTyp = kolo.target.dlouha ? 'dlouha' : 'kratka';
+  if(typ === correctTyp){
+    btn.classList.add('correct');
+    session.correct++;
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#view-kratka-dlouha .kd-btn').forEach(b => {
+      if(b.dataset.typ === correctTyp) b.classList.add('correct');
+    });
+  }
+  setTimeout(() => {
+    session.idx++;
+    session.locked = false;
+    renderKratkaDlouha();
+    if(session.idx < session.queue.length) setTimeout(() => listenCurrent(), 300);
+  }, 1500);
+}
+
+/* === FINISH === */
+function finishCv(correct, total, ptsPerCorrect){
+  const pts = correct * ptsPerCorrect + (correct === total ? 5 : 0);
+  if(currentCv) addPoints(currentCv, pts);
+
+  const pct = correct / total;
+  let title, icon, desc;
+  if(pct === 1){
+    title = 'Skvělá práce!';
+    icon = '🏆';
+    desc = `Všechno správně!`;
+  } else if(pct >= 0.7){
+    title = 'Velmi dobře!';
+    icon = '🎉';
+    desc = `Správně ${correct} z ${total}.`;
+  } else {
+    title = 'Dobrý pokus!';
+    icon = '💪';
+    desc = `Správně ${correct} z ${total}. Zkus to znovu!`;
+  }
+
+  $('done-title').textContent = title;
+  $('done-icon').textContent = icon;
+  $('done-desc').textContent = desc;
+  $('done-pts').textContent = pts;
+  goView('done');
+}
+
+renderTotalPoints();
+</script>
+</body>
+</html>

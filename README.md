@@ -1,55 +1,79 @@
 # Lingua · Kroužek předškoláka
 
-Aplikace pro půlroční kurz **Kroužek předškoláka** ZŠ Lingua Universal — příprava k zápisu do 1. třídy.
+Aplikace pro **půlroční kurz Kroužek předškoláka** ZŠ Lingua Universal — příprava k zápisu do 1. třídy.
+
+**KOMPLETNÍ VERZE — všech 6 oblastí hotových!** ✅
 
 ## Vizuál
 
 - **Font**: Barlow Condensed
 - **Hlavní barvy**: školní modrá `#32a0d2` + oranžová `#ffaa37`
-- **Akcentní barvy** per oblast (růžová, fialová, zelená, modrá, žlutá, červená)
-- Sjednoceno se stylem **LinguaCzech**, **LinguaCzech II**, **LinguaDeutsch**
+- **Akcent per oblast** (6 různých barev)
+- Sjednoceno se stylem LinguaCzech / II / Deutsch
+
+## 6 oblastí
+
+| Oblast | Cvičení | Barva |
+|--------|---------|-------|
+| 🔢 **Předmatematické představy** | Kde je víc, Bingo s tečkami, Spoj počet s číslem | růžová |
+| 👂 **Sluchové vnímání** | První písmeno, Rýmy, Počty slabik, Krátká/dlouhá (s audiem) | zelená |
+| 👁️ **Zrakové vnímání** | Najdi rozdíl, Doplň vzor, Najdi všechna stejná | fialová |
+| 🧭 **Prostorová orientace** | Kterým směrem, Kde je předmět, Bludiště | žlutá |
+| ⏰ **Časová orientace** | Co bylo dřív, Denní režim, Roční období | modrá |
+| 🖍️ **Grafomotorika** | Čáry, Vlnky a kličky, Tvary (SVG tracing) | červená |
+
+**CELKEM: 19 interaktivních cvičení**
 
 ## Soubory
 
 ```
-index.html               ← Landing s 6 oblastmi (záložky: Pro děti / Pro rodiče)
-rodice.html              ← Pro rodiče - tipy, aktivity, diagnostika
-predmatematicke.html     ← Předmatematické představy (3 cvičení)
-zrakove.html             ← Zrakové vnímání (3 cvičení)
+index.html               ← Landing - 6 oblastí
+rodice.html              ← Pro rodiče - tipy, diagnostika, tisk
+predmatematicke.html     ← 3 cvičení (růžová)
+sluchove.html            ← 4 cvičení s audiem (zelená)
+zrakove.html             ← 3 cvičení (fialová)
+prostorova.html          ← 3 cvičení (žlutá)
+casova.html              ← 3 cvičení (modrá)
+grafomotorika.html       ← 3 tracing cvičení (červená)
 logo.png                 ← Školní logo
 ```
 
-## 6 oblastí (podle pracovního sešitu)
+## Speciální funkce
 
-| Oblast | Stav | Cvičení |
-|--------|------|---------|
-| 🔢 Předmatematické představy | ✅ Hotovo | Kde je víc, Bingo s tečkami, Spoj počet s číslem |
-| 👁️ Zrakové vnímání | ✅ Hotovo | Najdi rozdíl, Doplň vzor, Najdi všechna stejná |
-| 👂 Sluchové vnímání | 🔄 Brzy | Rýmy, první písmeno, slabiky (s audiem) |
-| 🧭 Prostorová orientace | 🔄 Brzy | Doleva/doprava, kam plave ryba |
-| ⏰ Časová orientace | 🔄 Brzy | Co bylo dřív, denní režim, roční období |
-| 🖍️ Grafomotorika | 🔄 Brzy | Obtahování čar (tracing) |
+### 🔊 Audio (sluchové vnímání)
+Web Speech API s `lang="cs-CZ"`. Funguje v Chrome, Edge, Safari.
 
-## Pro rodiče
+### 🖍️ SVG Tracing (grafomotorika)
+- Funguje **myší i prstem** (touch events)
+- Hodnocení podle pokrytí vzorové čáry
+- 15 různých tvarů (čáry, vlnky, kličky, geometrické tvary, srdíčko, hvězda)
 
-`rodice.html` obsahuje:
-- Popis každé z 6 oblastí
-- **Vhodné aktivity** pro každou oblast (z pracovního sešitu)
-- **Diagnostické tlačítka** (Začíná / Zkouší / Zvládá / Expert) — uloží se do localStorage
-- Obecné tipy
-- Tlačítko **Tisknout** — pro vytvoření záznamového archu jako v sešitu
+### 🐭 Bludiště (prostorová)
+- 7×7 mřížka s ovládáním šipek
+- 3 různá bludiště
+- Hodnocení podle počtu tahů
+
+### 👨‍👩‍👧 Pro rodiče
+- Detailní popis každé oblasti
+- Vhodné aktivity pro domov
+- Diagnostické tlačítka (Začíná / Zkouší / Zvládá / Expert)
+- **Tisknutelný záznamový arch** — titulní strana + tabulka
 
 ## Bodový systém
 
-- ⭐ **5 b.** za hotové cvičení
-- Bonus **+5 b.** za 100% správně
-- Hvězdičky na kartě cvičení podle bodů (5/15/30 b.)
+⭐ Hvězdičky místo trofejí. Body se ukládají per oblast v localStorage:
+- `lingua-predskolak-predmat-v1`
+- `lingua-predskolak-sluchove-v1`
+- `lingua-predskolak-zrakove-v1`
+- `lingua-predskolak-prostorova-v1`
+- `lingua-predskolak-casova-v1`
+- `lingua-predskolak-grafomotorika-v1`
+- `lingua-predskolak-diagnostika-v1` (rodičovská diagnostika)
 
-## Nasazení (GitHub Pages)
+## Nasazení
 
 V repu `LinguaPredskolak`:
-- `https://linguauniversal.github.io/LinguaPredskolak/` — landing
-- Postupně přidávat další oblasti (Sluchové, Prostorová, Časová, Grafomotorika)
+- `https://linguauniversal.github.io/LinguaPredskolak/`
 
 ## Licence
 

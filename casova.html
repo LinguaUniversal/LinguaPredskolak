@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Časová orientace · Lingua předškolák</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root{
+  --bg: #eff6ff;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-muted: #94a3b8;
+  --line: #e2e8f0;
+  --line-soft: #f1f5f9;
+
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #dbeafe;
+  --primary-border: #bfdbfe;
+
+  --orange: #ffaa37;
+  --ok: #10b981;
+  --err: #ef4444;
+
+  --font: 'Barlow Condensed', -apple-system, sans-serif;
+  --r: 12px;
+  --rl: 20px;
+  --shadow: 0 4px 16px rgba(59, 130, 246, .12);
+  --shadow-lg: 0 12px 40px rgba(59, 130, 246, .18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:18px;}
+body{ font-family: var(--font); background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; font-weight: 500; }
+
+.topbar{ background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; }
+.topbar-inner{ max-width: 1100px; margin: 0 auto; padding: .8rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.brand-mark{ display: flex; align-items: center; gap: .8rem; text-decoration: none; color: var(--ink); }
+.brand-logo{ width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
+.brand-text{ display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name{ font-size: 1.35rem; font-weight: 700; }
+.brand-sub{ font-size: .78rem; color: var(--ink-muted); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.topbar-spacer{flex:1;}
+.topbar-section{
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: 1rem; font-weight: 700; color: var(--primary-dark);
+  padding: .4rem 1rem; background: var(--primary-light);
+  border-radius: 99px; border: 1px solid var(--primary-border);
+}
+.section-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--primary); display: inline-block; }
+
+.app{ max-width: 900px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+.view{ display: none; }
+.view.active{ display: block; }
+
+.hero{ text-align: center; padding: 2.5rem 1rem 1.5rem; }
+.hero-icon{ font-size: 4rem; display: block; margin-bottom: .5rem; line-height: 1; }
+.hero-title{ font-size: 2.5rem; font-weight: 800; line-height: 1.1; }
+.hero-title em{ font-style: italic; color: var(--primary); }
+.hero-desc{ font-size: 1.05rem; color: var(--ink-soft); margin-top: .5rem; }
+
+.score-bar{
+  display: flex; justify-content: center; align-items: center; gap: 1.5rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 99px;
+  padding: .8rem 1.5rem; margin: 0 auto 2rem; max-width: 480px; box-shadow: var(--shadow);
+}
+.score-num{ font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+.score-label{ font-size: .9rem; color: var(--ink-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+
+.cviceni-list{ display: grid; grid-template-columns: 1fr; gap: .85rem; max-width: 640px; margin: 0 auto; }
+.cv-card{
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--surface); border: 2px solid var(--line); border-radius: var(--rl);
+  padding: 1rem 1.5rem; cursor: pointer; text-align: left;
+  font-family: var(--font); transition: all .15s; width: 100%;
+}
+.cv-card:hover{ border-color: var(--primary); transform: translateX(4px); box-shadow: var(--shadow); }
+.cv-icon{ font-size: 2rem; width: 56px; height: 56px; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cv-content{ flex: 1; }
+.cv-title{ font-size: 1.3rem; font-weight: 800; }
+.cv-desc{ font-size: .92rem; color: var(--ink-soft); margin-top: .15rem; }
+.cv-stars{ font-size: 1rem; color: var(--orange); letter-spacing: .1em; flex-shrink: 0; }
+.cv-arrow{ font-size: 1.5rem; color: var(--ink-muted); flex-shrink: 0; }
+
+.back-btn{
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--surface); border: 1px solid var(--line); color: var(--ink-soft);
+  font-family: var(--font); font-size: 1rem; font-weight: 600;
+  padding: .55rem 1.2rem; border-radius: 99px; cursor: pointer; margin-bottom: 1.5rem;
+}
+.back-btn:hover{ border-color: var(--primary); color: var(--primary); }
+
+.zadani{
+  background: var(--primary-light); border: 1px solid var(--primary-border);
+  border-radius: var(--rl); padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;
+  text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+}
+
+.progress-bar{ height: 8px; background: var(--primary-light); border-radius: 99px; overflow: hidden; margin-bottom: 1.5rem; }
+.progress-fill{ height: 100%; background: var(--primary); transition: width .4s; width: 0%; }
+
+/* === CV1: Co bylo dřív (3 fáze) === */
+.bylo-options{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  max-width: 540px; margin: 0 auto;
+}
+.bylo-card{
+  background: var(--surface); border: 3px solid var(--line); border-radius: var(--rl);
+  padding: 1.5rem; cursor: pointer; text-align: center;
+  font-size: 4rem; line-height: 1; transition: all .15s;
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  min-height: 130px;
+  position: relative;
+}
+.bylo-card .order-num{
+  position: absolute; top: 8px; left: 8px;
+  background: var(--primary); color: white; width: 28px; height: 28px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; font-weight: 800;
+  opacity: 0; transition: opacity .2s;
+}
+.bylo-card.selected .order-num{ opacity: 1; }
+.bylo-card:hover:not(.locked){ border-color: var(--primary); transform: scale(1.05); }
+.bylo-card.selected{ border-color: var(--primary); background: var(--primary-light); }
+.bylo-card.correct{ background: #d1fae5; border-color: var(--ok); animation: bounce .5s; }
+.bylo-card.wrong{ background: #fee2e2; border-color: var(--err); animation: shake .4s; }
+
+@keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+
+/* === CV2: Denní režim === */
+.rezim-target{
+  background: var(--surface); border: 3px solid var(--primary); border-radius: var(--rl);
+  padding: 2rem; margin-bottom: 1.5rem; text-align: center;
+}
+.rezim-emoji{ font-size: 4rem; line-height: 1; margin-bottom: .5rem; }
+.rezim-question{ font-size: 1.3rem; font-weight: 700; color: var(--primary-dark); }
+
+.rezim-options{
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+  max-width: 500px; margin: 0 auto;
+}
+.rezim-btn{
+  background: var(--surface); border: 3px solid var(--line); border-radius: var(--rl);
+  padding: 1.5rem 1rem; cursor: pointer; font-family: var(--font);
+  font-weight: 800; transition: all .15s;
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+}
+.rezim-btn-icon{ font-size: 2.5rem; line-height: 1; }
+.rezim-btn-label{ font-size: 1.1rem; }
+.rezim-btn:hover:not(:disabled){ border-color: var(--primary); transform: scale(1.05); }
+.rezim-btn.correct{ background: #d1fae5; border-color: var(--ok); }
+.rezim-btn.wrong{ background: #fee2e2; border-color: var(--err); animation: shake .4s; }
+
+/* === CV3: Roční období === */
+.obdobi-text{
+  background: var(--surface); border: 3px solid var(--primary); border-radius: var(--rl);
+  padding: 1.5rem; margin-bottom: 1.5rem; text-align: center;
+  font-size: 1.2rem; font-weight: 600; color: var(--ink);
+}
+.obdobi-text b{ color: var(--primary-dark); }
+.obdobi-options{
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+  max-width: 500px; margin: 0 auto;
+}
+.obdobi-btn{
+  background: var(--surface); border: 3px solid var(--line); border-radius: var(--rl);
+  padding: 1.5rem 1rem; cursor: pointer; font-family: var(--font);
+  font-weight: 800; transition: all .15s;
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+}
+.obdobi-btn-icon{ font-size: 3rem; line-height: 1; }
+.obdobi-btn-label{ font-size: 1.2rem; }
+.obdobi-btn:hover:not(:disabled){ border-color: var(--primary); transform: scale(1.05); }
+.obdobi-btn.correct{ background: #d1fae5; border-color: var(--ok); }
+.obdobi-btn.wrong{ background: #fee2e2; border-color: var(--err); animation: shake .4s; }
+
+/* === HOTOVO === */
+.done-wrap{ text-align: center; padding: 3rem 1rem; }
+.done-icon{ font-size: 5rem; margin-bottom: 1rem; }
+.done-title{ font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: .5rem; }
+.done-points-anim{ font-size: 2.5rem; font-weight: 800; color: var(--orange); margin: 1rem 0; animation: pop .8s ease-out; }
+@keyframes pop { 0%{transform:scale(.5);opacity:0} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.done-desc{ font-size: 1.1rem; color: var(--ink-soft); margin-bottom: 1.5rem; }
+.done-actions{ display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+.btn{ font-family: var(--font); font-size: 1.05rem; font-weight: 700; padding: .85rem 1.8rem; border-radius: 99px; border: 2px solid; cursor: pointer; text-decoration: none; }
+.btn-primary{ background: var(--primary); color: white; border-color: var(--primary); }
+.btn-primary:hover{ background: var(--primary-dark); }
+.btn-secondary{ background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn-secondary:hover{ border-color: var(--primary); color: var(--primary); }
+
+.footer{ margin-top: 5rem; padding-top: 2.5rem; border-top: 1px solid var(--line); text-align: center; font-size: 1rem; color: var(--ink-muted); }
+.footer-logo{ width: 36px; height: 47px; object-fit: contain; margin-bottom: .8rem; opacity: .5; }
+.footer b{ color: var(--ink-soft); font-weight: 700; }
+.footer a{ color: var(--primary); text-decoration: none; }
+
+@media (max-width: 600px){
+  html{ font-size: 16px; }
+  .app{ padding: 0 1rem 4rem; }
+  .topbar-inner{ padding: .65rem 1rem; }
+  .hero{ padding: 1.5rem .5rem 1rem; }
+  .hero-title{ font-size: 1.8rem; }
+  .hero-icon{ font-size: 3rem; }
+  .bylo-card{ font-size: 3rem; padding: 1rem; min-height: 100px; }
+  .rezim-emoji{ font-size: 3rem; }
+  .obdobi-btn-icon{ font-size: 2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand-mark">
+      <img class="brand-logo" src="logo.png" alt="Lingua Universal">
+      <div class="brand-text">
+        <span class="brand-name">Lingua</span>
+        <span class="brand-sub">Předškolák</span>
+      </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-section">
+      <span class="section-dot"></span>
+      <span>⏰ Časová orientace</span>
+    </div>
+  </div>
+</div>
+
+<main class="app">
+
+  <!-- ═══ MENU ═══ -->
+  <div class="view active" id="view-menu">
+    <section class="hero">
+      <span class="hero-icon">⏰</span>
+      <h1 class="hero-title">Časová <em>orientace</em></h1>
+      <p class="hero-desc">Co bylo dřív, denní režim, roční období.</p>
+    </section>
+
+    <div class="score-bar">
+      <span class="score-num" id="total-points">0</span>
+      <span class="score-label">hvězdiček</span>
+    </div>
+
+    <div class="cviceni-list">
+      <button class="cv-card" onclick="startCv('bylo')">
+        <div class="cv-icon">🌱</div>
+        <div class="cv-content">
+          <div class="cv-title">Co bylo dřív?</div>
+          <div class="cv-desc">Klikni na obrázky v pořadí — od prvního k poslednímu</div>
+        </div>
+        <div class="cv-stars" data-cv="bylo"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('rezim')">
+        <div class="cv-icon">🌅</div>
+        <div class="cv-content">
+          <div class="cv-title">Denní režim</div>
+          <div class="cv-desc">Kdy se to dělá? Ráno, dopoledne, odpoledne, večer?</div>
+        </div>
+        <div class="cv-stars" data-cv="rezim"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('obdobi')">
+        <div class="cv-icon">🌸</div>
+        <div class="cv-content">
+          <div class="cv-title">Roční období</div>
+          <div class="cv-desc">Jaro, léto, podzim, zima — co kam patří?</div>
+        </div>
+        <div class="cv-stars" data-cv="obdobi"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══ CV: Co bylo dřív ═══ -->
+  <div class="view" id="view-bylo">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-bl"></div></div>
+    <div class="zadani" id="bylo-zadani">Seřaď obrázky — od prvního k poslednímu</div>
+    <div class="bylo-options" id="bylo-options"></div>
+  </div>
+
+  <!-- ═══ CV: Denní režim ═══ -->
+  <div class="view" id="view-rezim">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-rz"></div></div>
+    <div class="zadani">Kdy se to dělá?</div>
+    <div class="rezim-target">
+      <div class="rezim-emoji" id="rezim-emoji">🍳</div>
+      <div class="rezim-question" id="rezim-question">Snídaně</div>
+    </div>
+    <div class="rezim-options" id="rezim-options"></div>
+  </div>
+
+  <!-- ═══ CV: Roční období ═══ -->
+  <div class="view" id="view-obdobi">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-ob"></div></div>
+    <div class="zadani">Které roční období to je?</div>
+    <div class="obdobi-text" id="obdobi-text">—</div>
+    <div class="obdobi-options" id="obdobi-options"></div>
+  </div>
+
+  <!-- ═══ HOTOVO ═══ -->
+  <div class="view" id="view-done">
+    <div class="done-wrap">
+      <div class="done-icon" id="done-icon">🎉</div>
+      <h2 class="done-title" id="done-title">Výborně!</h2>
+      <div class="done-points-anim">+<span id="done-pts">0</span> ⭐</div>
+      <p class="done-desc" id="done-desc">Zvládla jsi to skvěle.</p>
+      <div class="done-actions">
+        <button class="btn btn-primary" onclick="repeatCv()">Hrát znovu</button>
+        <button class="btn btn-secondary" onclick="backToMenu()">Zpět</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <img class="footer-logo" src="logo.png" alt="Lingua Universal">
+    <div><b>ZŠ a MŠ Lingua Universal</b></div>
+    <div>Sovova 480/2, 412 01 Litoměřice</div>
+    <div style="margin-top:.5rem">
+      <a href="index.html">← Zpět na úvod</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+const SCORE_KEY = 'lingua-predskolak-casova-v1';
+
+function loadScore(){
+  try { const s = localStorage.getItem(SCORE_KEY); if(s) return JSON.parse(s); } catch(e){}
+  return {total: 0, cv: {}};
+}
+function saveScore(s){ try { localStorage.setItem(SCORE_KEY, JSON.stringify(s)); } catch(e){} }
+function addPoints(cvId, pts){
+  const s = loadScore();
+  s.total = (s.total || 0) + pts;
+  s.cv = s.cv || {};
+  s.cv[cvId] = (s.cv[cvId] || 0) + pts;
+  saveScore(s);
+}
+function getCvStars(cvId){
+  const s = loadScore();
+  const pts = (s.cv && s.cv[cvId]) || 0;
+  if(pts >= 30) return '⭐⭐⭐';
+  if(pts >= 15) return '⭐⭐';
+  if(pts >= 5) return '⭐';
+  return '';
+}
+function renderTotalPoints(){
+  document.getElementById('total-points').textContent = loadScore().total;
+  document.querySelectorAll('.cv-stars').forEach(el => {
+    el.textContent = getCvStars(el.dataset.cv);
+  });
+}
+
+let currentCv = null;
+let session = null;
+function $(id){ return document.getElementById(id); }
+function goView(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  $('view-' + id).classList.add('active');
+  window.scrollTo({top:0});
+}
+function backToMenu(){ currentCv = null; session = null; goView('menu'); renderTotalPoints(); }
+function startCv(id){
+  currentCv = id;
+  if(id === 'bylo') startBylo();
+  else if(id === 'rezim') startRezim();
+  else if(id === 'obdobi') startObdobi();
+}
+function repeatCv(){ if(currentCv) startCv(currentCv); }
+
+function shuffle(a){
+  const b = a.slice();
+  for(let i = b.length-1; i > 0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 1: CO BYLO DŘÍV (sekvence)
+═══════════════════════════════════════════════════ */
+const SEKVENCE = [
+  {title: 'Růst rostliny', steps: ['🌱','🌿','🌷']},
+  {title: 'Stárnutí', steps: ['👶','🧒','🧑','👴']},
+  {title: 'Den', steps: ['🌅','☀️','🌇','🌙']},
+  {title: 'Vajíčko', steps: ['🥚','🐣','🐔']},
+  {title: 'Sníh', steps: ['☃️','💧','🌱']},
+  {title: 'Pečení dortu', steps: ['🥚','🥣','🎂']},
+  {title: 'Strom', steps: ['🌱','🌿','🌳']},
+  {title: 'Motýl', steps: ['🥚','🐛','🦋']},
+  {title: 'Cesta do školy', steps: ['🛌','🍳','🎒','🏫']}
+];
+
+function startBylo(){
+  // 5 kol, různé sekvence
+  const queue = shuffle(SEKVENCE).slice(0, 5);
+  session = {
+    queue,
+    idx: 0,
+    correct: 0,
+    selected: [],
+    locked: false
+  };
+  goView('bylo');
+  renderBylo();
+}
+
+function renderBylo(){
+  if(session.idx >= session.queue.length){
+    finishCv(session.correct, session.queue.length, 6);
+    return;
+  }
+  $('pf-bl').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  const kolo = session.queue[session.idx];
+
+  $('bylo-zadani').innerHTML = `<b>${kolo.title}</b> — klikni na obrázky v pořadí (od prvního)`;
+
+  const opts = $('bylo-options');
+  opts.innerHTML = '';
+  opts.style.gridTemplateColumns = `repeat(${kolo.steps.length}, 1fr)`;
+
+  // Zamíchat pořadí
+  const shuffledSteps = shuffle(kolo.steps.map((s, i) => ({emoji: s, originalIdx: i})));
+
+  session.selected = [];
+
+  shuffledSteps.forEach(step => {
+    const card = document.createElement('div');
+    card.className = 'bylo-card';
+    card.innerHTML = `<span class="order-num"></span>${step.emoji}`;
+    card.dataset.originalIdx = step.originalIdx;
+    card.onclick = () => {
+      if(session.locked) return;
+      if(card.classList.contains('selected')) return;
+
+      session.selected.push(card);
+      card.classList.add('selected');
+      card.querySelector('.order-num').textContent = session.selected.length;
+
+      if(session.selected.length === kolo.steps.length){
+        session.locked = true;
+        // Vyhodnotit
+        const userOrder = session.selected.map(c => parseInt(c.dataset.originalIdx));
+        const correct = userOrder.every((v, i) => v === i);
+
+        setTimeout(() => {
+          if(correct){
+            session.selected.forEach(c => c.classList.add('correct'));
+            session.correct++;
+          } else {
+            session.selected.forEach((c, i) => {
+              const expectedIdx = i;
+              const actualIdx = parseInt(c.dataset.originalIdx);
+              if(expectedIdx === actualIdx) c.classList.add('correct');
+              else c.classList.add('wrong');
+            });
+          }
+
+          setTimeout(() => {
+            session.idx++;
+            session.locked = false;
+            renderBylo();
+          }, 1500);
+        }, 300);
+      }
+    };
+    opts.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 2: DENNÍ REŽIM
+═══════════════════════════════════════════════════ */
+const REZIM_AKTIVITY = [
+  {emoji: '🛌', name: 'Vstávání', cas: 'rano'},
+  {emoji: '🍳', name: 'Snídaně', cas: 'rano'},
+  {emoji: '🚿', name: 'Sprchování ráno', cas: 'rano'},
+  {emoji: '📚', name: 'Vyučování', cas: 'dopoledne'},
+  {emoji: '🎒', name: 'Cesta do školy', cas: 'rano'},
+  {emoji: '🥪', name: 'Svačina', cas: 'dopoledne'},
+  {emoji: '🍝', name: 'Oběd', cas: 'odpoledne'},
+  {emoji: '🚴', name: 'Hraní venku', cas: 'odpoledne'},
+  {emoji: '📖', name: 'Domácí úkoly', cas: 'odpoledne'},
+  {emoji: '🍽️', name: 'Večeře', cas: 'vecer'},
+  {emoji: '🛁', name: 'Koupel', cas: 'vecer'},
+  {emoji: '😴', name: 'Spaní', cas: 'vecer'},
+  {emoji: '🌅', name: 'Východ slunce', cas: 'rano'},
+  {emoji: '🌙', name: 'Měsíc na nebi', cas: 'vecer'}
+];
+
+const REZIM_OPTIONS = [
+  {key: 'rano', icon: '🌅', label: 'Ráno'},
+  {key: 'dopoledne', icon: '☀️', label: 'Dopoledne'},
+  {key: 'odpoledne', icon: '🌤️', label: 'Odpoledne'},
+  {key: 'vecer', icon: '🌙', label: 'Večer'}
+];
+
+function startRezim(){
+  const queue = shuffle(REZIM_AKTIVITY).slice(0, 8);
+  session = {queue, idx: 0, correct: 0, locked: false};
+  goView('rezim');
+  renderRezim();
+}
+
+function renderRezim(){
+  if(session.idx >= session.queue.length){
+    finishCv(session.correct, session.queue.length, 4);
+    return;
+  }
+  $('pf-rz').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  const kolo = session.queue[session.idx];
+
+  $('rezim-emoji').textContent = kolo.emoji;
+  $('rezim-question').textContent = kolo.name;
+
+  const opts = $('rezim-options');
+  opts.innerHTML = '';
+  REZIM_OPTIONS.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'rezim-btn';
+    btn.innerHTML = `<span class="rezim-btn-icon">${opt.icon}</span><span class="rezim-btn-label">${opt.label}</span>`;
+    btn.onclick = () => {
+      if(session.locked) return;
+      session.locked = true;
+      if(opt.key === kolo.cas){
+        btn.classList.add('correct');
+        session.correct++;
+      } else {
+        btn.classList.add('wrong');
+        opts.querySelectorAll('.rezim-btn').forEach(b => {
+          if(b.textContent.includes(REZIM_OPTIONS.find(o => o.key === kolo.cas).label)) b.classList.add('correct');
+        });
+      }
+      setTimeout(() => {
+        session.idx++;
+        session.locked = false;
+        renderRezim();
+      }, 1100);
+    };
+    opts.appendChild(btn);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CV 3: ROČNÍ OBDOBÍ
+═══════════════════════════════════════════════════ */
+const OBDOBI_CHARAKTER = [
+  {text: 'Kvetou tulipány a kočičky. Ptáci se vrací domů.', obdobi: 'jaro'},
+  {text: 'Stromy začínají kvést. Vajíčka praskají, rodí se kuřátka.', obdobi: 'jaro'},
+  {text: 'Země taje a začíná se zelenat. Sníh roztává.', obdobi: 'jaro'},
+
+  {text: 'Slunce hřeje. Jdeme se koupat do bazénu a k vodě.', obdobi: 'leto'},
+  {text: 'Jíme zmrzlinu. Je teplo, hraje se venku do tmy.', obdobi: 'leto'},
+  {text: 'Zraje ovoce — třešně, jahody, jablka. Prázdniny!', obdobi: 'leto'},
+
+  {text: 'Listy stromů žloutnou a padají. Foukne studený vítr.', obdobi: 'podzim'},
+  {text: 'Sbíráme houby a kaštany v lese. Začíná škola.', obdobi: 'podzim'},
+  {text: 'Lidé pouštějí draky. Dýně připravujeme na strašáky.', obdobi: 'podzim'},
+
+  {text: 'Padá sníh, je studeno. Jdeme bobovat a stavět sněhuláka.', obdobi: 'zima'},
+  {text: 'Vánoce, stromeček, dárky. Bruslíme na ledě.', obdobi: 'zima'},
+  {text: 'Stromy jsou bez listů. Voda zmrzne v led.', obdobi: 'zima'}
+];
+
+const OBDOBI_OPTIONS = [
+  {key: 'jaro', icon: '🌸', label: 'Jaro'},
+  {key: 'leto', icon: '☀️', label: 'Léto'},
+  {key: 'podzim', icon: '🍂', label: 'Podzim'},
+  {key: 'zima', icon: '❄️', label: 'Zima'}
+];
+
+function startObdobi(){
+  const queue = shuffle(OBDOBI_CHARAKTER).slice(0, 8);
+  session = {queue, idx: 0, correct: 0, locked: false};
+  goView('obdobi');
+  renderObdobi();
+}
+
+function renderObdobi(){
+  if(session.idx >= session.queue.length){
+    finishCv(session.correct, session.queue.length, 4);
+    return;
+  }
+  $('pf-ob').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  const kolo = session.queue[session.idx];
+
+  $('obdobi-text').textContent = kolo.text;
+
+  const opts = $('obdobi-options');
+  opts.innerHTML = '';
+  OBDOBI_OPTIONS.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'obdobi-btn';
+    btn.innerHTML = `<span class="obdobi-btn-icon">${opt.icon}</span><span class="obdobi-btn-label">${opt.label}</span>`;
+    btn.onclick = () => {
+      if(session.locked) return;
+      session.locked = true;
+      if(opt.key === kolo.obdobi){
+        btn.classList.add('correct');
+        session.correct++;
+      } else {
+        btn.classList.add('wrong');
+        opts.querySelectorAll('.obdobi-btn').forEach(b => {
+          if(b.textContent.includes(OBDOBI_OPTIONS.find(o => o.key === kolo.obdobi).label)) b.classList.add('correct');
+        });
+      }
+      setTimeout(() => {
+        session.idx++;
+        session.locked = false;
+        renderObdobi();
+      }, 1200);
+    };
+    opts.appendChild(btn);
+  });
+}
+
+/* === FINISH === */
+function finishCv(correct, total, ptsPerCorrect){
+  const pts = correct * ptsPerCorrect + (correct === total ? 5 : 0);
+  if(currentCv) addPoints(currentCv, pts);
+
+  const pct = correct / total;
+  let title, icon, desc;
+  if(pct === 1){ title = 'Skvělá práce!'; icon = '🏆'; desc = 'Všechno správně!'; }
+  else if(pct >= 0.7){ title = 'Velmi dobře!'; icon = '🎉'; desc = `Správně ${correct} z ${total}.`; }
+  else { title = 'Dobrý pokus!'; icon = '💪'; desc = `Správně ${correct} z ${total}. Zkus to znovu!`; }
+
+  $('done-title').textContent = title;
+  $('done-icon').textContent = icon;
+  $('done-desc').textContent = desc;
+  $('done-pts').textContent = pts;
+  goView('done');
+}
+
+renderTotalPoints();
+</script>
+</body>
+</html>

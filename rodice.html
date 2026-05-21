@@ -398,11 +398,115 @@ body{
 .footer a{ color: var(--blue); text-decoration: none; }
 
 @media print{
-  .topbar, .tabs, .footer, .print-section { display: none; }
-  body{ background: white; }
-  .oblast-detail{ break-inside: avoid; page-break-inside: avoid; }
-  .urovne{ display: flex; gap: 8px; }
-  .uroven-btn{ border: 2px solid #999; padding: 6px 10px; font-size: .8rem; }
+  /* Skryj všechno */
+  body > *:not(#print-only){ display: none !important; }
+  /* Ukaz jen print-only */
+  #print-only{ display: block !important; }
+  body{ background: white !important; padding: 0; margin: 0; }
+  @page { margin: 1.5cm; }
+}
+
+/* Print arch styly */
+.print-arch{
+  font-family: var(--font);
+  color: var(--indigo);
+  max-width: 18cm;
+  margin: 0 auto;
+}
+.print-cover{
+  text-align: center;
+  padding: 4rem 2rem 2rem;
+  page-break-after: always;
+}
+.print-cover-title{
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: .15em;
+  line-height: 1.1;
+  margin-bottom: .5rem;
+}
+.print-cover-subtitle{
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: .25em;
+  margin-bottom: 3rem;
+  color: var(--blue);
+}
+.print-owl{
+  font-size: 6rem;
+  margin: 2rem 0;
+}
+.print-name-row{
+  margin-top: 4rem;
+  text-align: left;
+  max-width: 14cm;
+  margin-left: auto;
+  margin-right: auto;
+}
+.print-name-line{
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: .1em;
+}
+.print-page-break{
+  page-break-after: always;
+  height: 0;
+}
+.print-h2{
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 1rem 0 1.5rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--indigo);
+}
+.print-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+.print-table th{
+  background: var(--blue);
+  color: white;
+  padding: .8rem .5rem;
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.print-table td{
+  padding: .9rem .5rem;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.print-table td:first-child{ text-align: left; padding-left: 1rem; }
+.print-table td.cb{
+  text-align: center;
+  width: 12%;
+  font-size: 1.5rem;
+  color: var(--blue);
+}
+.print-table td.cb::before{ content: '☐'; }
+.print-table td.cb.checked::before{ content: '☑'; color: var(--orange); }
+
+.print-note{
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.05rem;
+  letter-spacing: .05em;
+}
+.print-footer{
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #cbd5e1;
+  font-size: .85rem;
+  color: var(--ink-muted);
+  font-weight: 500;
 }
 
 @media (max-width: 600px){
@@ -653,8 +757,53 @@ body{
 
   <div class="print-section">
     <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:.5rem">📄 Záznamový arch</h3>
-    <p style="color:var(--ink-soft);margin-bottom:.8rem">Své zaškrtnuté úrovně si můžete vytisknout — ideální pro založení do školky nebo do desek.</p>
-    <button class="print-btn" onclick="window.print()">🖨️ Vytisknout</button>
+    <p style="color:var(--ink-soft);margin-bottom:.8rem">Vytiskněte si přehledný arch s pokrokem. Ideální do desek, do školky nebo jako vzpomínka.</p>
+    <button class="print-btn" onclick="prepareAndPrint()">🖨️ Vytisknout záznamový arch</button>
+  </div>
+
+  <!-- Skrytý arch pro tisk -->
+  <div id="print-only" style="display:none">
+    <div class="print-arch">
+      <div class="print-cover">
+        <div class="print-cover-title">KROUŽEK<br>PŘEDŠKOLÁKA</div>
+        <div class="print-cover-subtitle">LINGUA UNIVERSAL</div>
+        <div class="print-owl">🦉</div>
+        <div class="print-name-row">
+          <div class="print-name-line"><strong>JMÉNO:</strong> ________________________</div>
+          <div class="print-name-line"><strong>ŠKOLNÍ ROK:</strong> ___________________</div>
+        </div>
+      </div>
+
+      <div class="print-page-break"></div>
+
+      <h2 class="print-h2">Pokrok v jednotlivých oblastech</h2>
+      <table class="print-table">
+        <thead>
+          <tr>
+            <th>OBLAST</th>
+            <th>ZAČÍNÁ</th>
+            <th>ZKOUŠÍ</th>
+            <th>ZVLÁDÁ</th>
+            <th>EXPERT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>🖍️ Grafomotorika</td><td class="cb" data-oblast="grafomotorika" data-idx="0"></td><td class="cb" data-oblast="grafomotorika" data-idx="1"></td><td class="cb" data-oblast="grafomotorika" data-idx="2"></td><td class="cb" data-oblast="grafomotorika" data-idx="3"></td></tr>
+          <tr><td>🔢 Předmatematické představy</td><td class="cb" data-oblast="predmatematicke" data-idx="0"></td><td class="cb" data-oblast="predmatematicke" data-idx="1"></td><td class="cb" data-oblast="predmatematicke" data-idx="2"></td><td class="cb" data-oblast="predmatematicke" data-idx="3"></td></tr>
+          <tr><td>👂 Sluchové vnímání</td><td class="cb" data-oblast="sluchove" data-idx="0"></td><td class="cb" data-oblast="sluchove" data-idx="1"></td><td class="cb" data-oblast="sluchove" data-idx="2"></td><td class="cb" data-oblast="sluchove" data-idx="3"></td></tr>
+          <tr><td>🧭 Prostorová orientace</td><td class="cb" data-oblast="prostorova" data-idx="0"></td><td class="cb" data-oblast="prostorova" data-idx="1"></td><td class="cb" data-oblast="prostorova" data-idx="2"></td><td class="cb" data-oblast="prostorova" data-idx="3"></td></tr>
+          <tr><td>⏰ Časová orientace</td><td class="cb" data-oblast="casova" data-idx="0"></td><td class="cb" data-oblast="casova" data-idx="1"></td><td class="cb" data-oblast="casova" data-idx="2"></td><td class="cb" data-oblast="casova" data-idx="3"></td></tr>
+          <tr><td>👁️ Zrakové vnímání</td><td class="cb" data-oblast="zrakove" data-idx="0"></td><td class="cb" data-oblast="zrakove" data-idx="1"></td><td class="cb" data-oblast="zrakove" data-idx="2"></td><td class="cb" data-oblast="zrakove" data-idx="3"></td></tr>
+        </tbody>
+      </table>
+
+      <p class="print-note">Datum: ____________________ &nbsp;&nbsp;&nbsp; Podpis: ____________________</p>
+
+      <div class="print-footer">
+        <strong>ZŠ a MŠ Lingua Universal</strong><br>
+        Sovova 480/2, 412 01 Litoměřice · zslingua.cz
+      </div>
+    </div>
   </div>
 
   <footer class="footer">
@@ -716,6 +865,23 @@ document.querySelectorAll('.urovne .uroven-btn').forEach(btn => {
 });
 
 renderDiag();
+
+/* === PRINT === */
+function prepareAndPrint(){
+  const d = loadDiag();
+  // Zaškrtnout tabulku
+  document.querySelectorAll('#print-only .cb').forEach(cell => {
+    const oblast = cell.dataset.oblast;
+    const idx = parseInt(cell.dataset.idx);
+    if(d[oblast] === idx){
+      cell.classList.add('checked');
+    } else {
+      cell.classList.remove('checked');
+    }
+  });
+  // Tisknout
+  window.print();
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grafomotorika · Lingua předškolák</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root{
+  --bg: #fef2f2;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-muted: #94a3b8;
+  --line: #e2e8f0;
+  --line-soft: #f1f5f9;
+
+  --primary: #ef4444;
+  --primary-dark: #dc2626;
+  --primary-light: #fee2e2;
+  --primary-border: #fecaca;
+
+  --orange: #ffaa37;
+  --ok: #10b981;
+  --err: #ef4444;
+  --blue: #32a0d2;
+
+  --font: 'Barlow Condensed', -apple-system, sans-serif;
+  --r: 12px;
+  --rl: 20px;
+  --shadow: 0 4px 16px rgba(239, 68, 68, .12);
+  --shadow-lg: 0 12px 40px rgba(239, 68, 68, .18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:18px;}
+body{ font-family: var(--font); background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; font-weight: 500; }
+
+.topbar{ background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; }
+.topbar-inner{ max-width: 1100px; margin: 0 auto; padding: .8rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.brand-mark{ display: flex; align-items: center; gap: .8rem; text-decoration: none; color: var(--ink); }
+.brand-logo{ width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
+.brand-text{ display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name{ font-size: 1.35rem; font-weight: 700; }
+.brand-sub{ font-size: .78rem; color: var(--ink-muted); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.topbar-spacer{flex:1;}
+.topbar-section{
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: 1rem; font-weight: 700; color: var(--primary-dark);
+  padding: .4rem 1rem; background: var(--primary-light);
+  border-radius: 99px; border: 1px solid var(--primary-border);
+}
+.section-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--primary); display: inline-block; }
+
+.app{ max-width: 900px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+.view{ display: none; }
+.view.active{ display: block; }
+
+.hero{ text-align: center; padding: 2.5rem 1rem 1.5rem; }
+.hero-icon{ font-size: 4rem; display: block; margin-bottom: .5rem; line-height: 1; }
+.hero-title{ font-size: 2.5rem; font-weight: 800; line-height: 1.1; }
+.hero-title em{ font-style: italic; color: var(--primary); }
+.hero-desc{ font-size: 1.05rem; color: var(--ink-soft); margin-top: .5rem; }
+
+.score-bar{
+  display: flex; justify-content: center; align-items: center; gap: 1.5rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 99px;
+  padding: .8rem 1.5rem; margin: 0 auto 2rem; max-width: 480px; box-shadow: var(--shadow);
+}
+.score-num{ font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+.score-label{ font-size: .9rem; color: var(--ink-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+
+.cviceni-list{ display: grid; grid-template-columns: 1fr; gap: .85rem; max-width: 640px; margin: 0 auto; }
+.cv-card{
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--surface); border: 2px solid var(--line); border-radius: var(--rl);
+  padding: 1rem 1.5rem; cursor: pointer; text-align: left;
+  font-family: var(--font); transition: all .15s; width: 100%;
+}
+.cv-card:hover{ border-color: var(--primary); transform: translateX(4px); box-shadow: var(--shadow); }
+.cv-icon{ font-size: 2rem; width: 56px; height: 56px; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cv-content{ flex: 1; }
+.cv-title{ font-size: 1.3rem; font-weight: 800; }
+.cv-desc{ font-size: .92rem; color: var(--ink-soft); margin-top: .15rem; }
+.cv-stars{ font-size: 1rem; color: var(--orange); letter-spacing: .1em; flex-shrink: 0; }
+.cv-arrow{ font-size: 1.5rem; color: var(--ink-muted); flex-shrink: 0; }
+
+.back-btn{
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--surface); border: 1px solid var(--line); color: var(--ink-soft);
+  font-family: var(--font); font-size: 1rem; font-weight: 600;
+  padding: .55rem 1.2rem; border-radius: 99px; cursor: pointer; margin-bottom: 1.5rem;
+}
+.back-btn:hover{ border-color: var(--primary); color: var(--primary); }
+
+.zadani{
+  background: var(--primary-light); border: 1px solid var(--primary-border);
+  border-radius: var(--rl); padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;
+  text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);
+}
+
+.progress-bar{ height: 8px; background: var(--primary-light); border-radius: 99px; overflow: hidden; margin-bottom: 1.5rem; }
+.progress-fill{ height: 100%; background: var(--primary); transition: width .4s; width: 0%; }
+
+/* === Tracing SVG === */
+.draw-board{
+  background: var(--surface); border: 3px solid var(--line); border-radius: var(--rl);
+  padding: 1.5rem; margin-bottom: 1.5rem;
+  touch-action: none;
+  position: relative;
+}
+.draw-svg{
+  width: 100%; height: auto; display: block;
+  background: var(--bg);
+  border-radius: var(--r);
+  cursor: crosshair;
+}
+.draw-svg path.guide-line{
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 8 8;
+}
+.draw-svg path.guide-arrow{
+  fill: var(--primary);
+}
+.draw-svg .start-dot{
+  fill: var(--ok);
+}
+.draw-svg .end-dot{
+  fill: var(--primary);
+}
+.draw-svg .user-path{
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.draw-controls{
+  display: flex; justify-content: center; gap: .8rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.draw-btn{
+  background: var(--surface); border: 2px solid var(--line); color: var(--ink);
+  font-family: var(--font); font-size: 1rem; font-weight: 700;
+  padding: .65rem 1.4rem; border-radius: 99px; cursor: pointer;
+  transition: all .15s;
+}
+.draw-btn:hover{ border-color: var(--primary); color: var(--primary); }
+.draw-btn.primary{ background: var(--primary); color: white; border-color: var(--primary); }
+.draw-btn.primary:hover{ background: var(--primary-dark); color: white; }
+
+.draw-feedback{
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  min-height: 30px;
+}
+.draw-feedback.good{ color: var(--ok); }
+.draw-feedback.bad{ color: var(--err); }
+
+/* Hint */
+.hint{
+  text-align: center;
+  font-size: .95rem;
+  color: var(--ink-soft);
+  margin: 1rem 0;
+}
+.hint b{ color: var(--ok); }
+
+/* === HOTOVO === */
+.done-wrap{ text-align: center; padding: 3rem 1rem; }
+.done-icon{ font-size: 5rem; margin-bottom: 1rem; }
+.done-title{ font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: .5rem; }
+.done-points-anim{ font-size: 2.5rem; font-weight: 800; color: var(--orange); margin: 1rem 0; animation: pop .8s ease-out; }
+@keyframes pop { 0%{transform:scale(.5);opacity:0} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.done-desc{ font-size: 1.1rem; color: var(--ink-soft); margin-bottom: 1.5rem; }
+.done-actions{ display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+.btn{ font-family: var(--font); font-size: 1.05rem; font-weight: 700; padding: .85rem 1.8rem; border-radius: 99px; border: 2px solid; cursor: pointer; text-decoration: none; }
+.btn-primary{ background: var(--primary); color: white; border-color: var(--primary); }
+.btn-primary:hover{ background: var(--primary-dark); }
+.btn-secondary{ background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn-secondary:hover{ border-color: var(--primary); color: var(--primary); }
+
+.footer{ margin-top: 5rem; padding-top: 2.5rem; border-top: 1px solid var(--line); text-align: center; font-size: 1rem; color: var(--ink-muted); }
+.footer-logo{ width: 36px; height: 47px; object-fit: contain; margin-bottom: .8rem; opacity: .5; }
+.footer b{ color: var(--ink-soft); font-weight: 700; }
+.footer a{ color: var(--primary); text-decoration: none; }
+
+@media (max-width: 600px){
+  html{ font-size: 16px; }
+  .app{ padding: 0 1rem 4rem; }
+  .topbar-inner{ padding: .65rem 1rem; }
+  .hero{ padding: 1.5rem .5rem 1rem; }
+  .hero-title{ font-size: 1.8rem; }
+  .hero-icon{ font-size: 3rem; }
+  .draw-board{ padding: .8rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand-mark">
+      <img class="brand-logo" src="logo.png" alt="Lingua Universal">
+      <div class="brand-text">
+        <span class="brand-name">Lingua</span>
+        <span class="brand-sub">Předškolák</span>
+      </div>
+    </a>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-section">
+      <span class="section-dot"></span>
+      <span>🖍️ Grafomotorika</span>
+    </div>
+  </div>
+</div>
+
+<main class="app">
+
+  <!-- ═══ MENU ═══ -->
+  <div class="view active" id="view-menu">
+    <section class="hero">
+      <span class="hero-icon">🖍️</span>
+      <h1 class="hero-title">Grafo<em>motorika</em></h1>
+      <p class="hero-desc">Obtahuj čáry. Hraj prstem nebo myší.</p>
+    </section>
+
+    <div class="score-bar">
+      <span class="score-num" id="total-points">0</span>
+      <span class="score-label">hvězdiček</span>
+    </div>
+
+    <div class="cviceni-list">
+      <button class="cv-card" onclick="startCv('cary')">
+        <div class="cv-icon">📏</div>
+        <div class="cv-content">
+          <div class="cv-title">Čáry</div>
+          <div class="cv-desc">Obtahuj rovné čáry — vodorovné, svislé, šikmé</div>
+        </div>
+        <div class="cv-stars" data-cv="cary"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('vlny')">
+        <div class="cv-icon">🌊</div>
+        <div class="cv-content">
+          <div class="cv-title">Vlnky a kličky</div>
+          <div class="cv-desc">Obtahuj vlnky, smyčky a kličky</div>
+        </div>
+        <div class="cv-stars" data-cv="vlny"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+      <button class="cv-card" onclick="startCv('tvary')">
+        <div class="cv-icon">⭕</div>
+        <div class="cv-content">
+          <div class="cv-title">Tvary</div>
+          <div class="cv-desc">Obtahuj kruhy, čtverce, trojúhelníky a srdíčka</div>
+        </div>
+        <div class="cv-stars" data-cv="tvary"></div>
+        <div class="cv-arrow">→</div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══ TRACING VIEW (universální) ═══ -->
+  <div class="view" id="view-trace">
+    <button class="back-btn" onclick="backToMenu()">← Zpět</button>
+    <div class="progress-bar"><div class="progress-fill" id="pf-tr"></div></div>
+    <div class="zadani" id="trace-zadani">Začni u 🟢 a táhni prstem po čáře k 🔴</div>
+
+    <div class="draw-board">
+      <svg class="draw-svg" id="draw-svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+        <path class="guide-line" id="guide-line" d=""></path>
+        <circle class="start-dot" id="start-dot" cx="0" cy="0" r="12"></circle>
+        <circle class="end-dot" id="end-dot" cx="0" cy="0" r="12"></circle>
+        <path class="user-path" id="user-path" d=""></path>
+      </svg>
+    </div>
+
+    <div class="draw-controls">
+      <button class="draw-btn" onclick="clearDraw()">🗑️ Smazat</button>
+      <button class="draw-btn primary" onclick="checkDraw()">✓ Hotovo</button>
+      <button class="draw-btn" onclick="skipCurrent()">Přeskočit →</button>
+    </div>
+
+    <div class="draw-feedback" id="draw-feedback"></div>
+
+    <div class="hint">
+      <b>Tip:</b> Sleduj zelený 🟢 začátek a táhni po tečkované čáře. Pak klikni <b>Hotovo</b>.
+    </div>
+  </div>
+
+  <!-- ═══ HOTOVO ═══ -->
+  <div class="view" id="view-done">
+    <div class="done-wrap">
+      <div class="done-icon" id="done-icon">🎉</div>
+      <h2 class="done-title" id="done-title">Výborně!</h2>
+      <div class="done-points-anim">+<span id="done-pts">0</span> ⭐</div>
+      <p class="done-desc" id="done-desc">Zvládla jsi to skvěle.</p>
+      <div class="done-actions">
+        <button class="btn btn-primary" onclick="repeatCv()">Hrát znovu</button>
+        <button class="btn btn-secondary" onclick="backToMenu()">Zpět</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <img class="footer-logo" src="logo.png" alt="Lingua Universal">
+    <div><b>ZŠ a MŠ Lingua Universal</b></div>
+    <div>Sovova 480/2, 412 01 Litoměřice</div>
+    <div style="margin-top:.5rem">
+      <a href="index.html">← Zpět na úvod</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+const SCORE_KEY = 'lingua-predskolak-grafomotorika-v1';
+
+function loadScore(){
+  try { const s = localStorage.getItem(SCORE_KEY); if(s) return JSON.parse(s); } catch(e){}
+  return {total: 0, cv: {}};
+}
+function saveScore(s){ try { localStorage.setItem(SCORE_KEY, JSON.stringify(s)); } catch(e){} }
+function addPoints(cvId, pts){
+  const s = loadScore();
+  s.total = (s.total || 0) + pts;
+  s.cv = s.cv || {};
+  s.cv[cvId] = (s.cv[cvId] || 0) + pts;
+  saveScore(s);
+}
+function getCvStars(cvId){
+  const s = loadScore();
+  const pts = (s.cv && s.cv[cvId]) || 0;
+  if(pts >= 30) return '⭐⭐⭐';
+  if(pts >= 15) return '⭐⭐';
+  if(pts >= 5) return '⭐';
+  return '';
+}
+function renderTotalPoints(){
+  document.getElementById('total-points').textContent = loadScore().total;
+  document.querySelectorAll('.cv-stars').forEach(el => {
+    el.textContent = getCvStars(el.dataset.cv);
+  });
+}
+
+let currentCv = null;
+let session = null;
+function $(id){ return document.getElementById(id); }
+function goView(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  $('view-' + id).classList.add('active');
+  window.scrollTo({top:0});
+}
+function backToMenu(){
+  currentCv = null; session = null;
+  goView('menu');
+  renderTotalPoints();
+}
+function startCv(id){
+  currentCv = id;
+  if(id === 'cary') startTrace(LINES);
+  else if(id === 'vlny') startTrace(WAVES);
+  else if(id === 'tvary') startTrace(SHAPES);
+}
+function repeatCv(){ if(currentCv) startCv(currentCv); }
+
+function shuffle(a){
+  const b = a.slice();
+  for(let i = b.length-1; i > 0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+}
+
+/* ═══════════════════════════════════════════════════
+   DEFINICE TVARŮ K OBTAHOVÁNÍ
+   Každý tvar: SVG path, startovní bod, koncový bod, samples points pro hodnocení
+═══════════════════════════════════════════════════ */
+
+const LINES = [
+  {name: 'Vodorovná čára', d: 'M 60,150 L 340,150', start: [60,150], end: [340,150]},
+  {name: 'Svislá čára', d: 'M 200,40 L 200,260', start: [200,40], end: [200,260]},
+  {name: 'Šikmá čára ↘', d: 'M 60,60 L 340,240', start: [60,60], end: [340,240]},
+  {name: 'Šikmá čára ↗', d: 'M 60,240 L 340,60', start: [60,240], end: [340,60]},
+  {name: 'Lomená čára', d: 'M 50,150 L 150,80 L 250,150 L 350,80', start: [50,150], end: [350,80]}
+];
+
+const WAVES = [
+  {name: 'Malá vlnka', d: 'M 50,150 Q 100,80 150,150 T 250,150 T 350,150', start: [50,150], end: [350,150]},
+  {name: 'Velká vlna', d: 'M 50,200 Q 125,50 200,200 T 350,200', start: [50,200], end: [350,200]},
+  {name: 'Hadi (oblé vlny)', d: 'M 50,150 Q 80,100 110,150 Q 140,200 170,150 Q 200,100 230,150 Q 260,200 290,150 Q 320,100 350,150', start: [50,150], end: [350,150]},
+  {name: 'Kličky', d: 'M 50,180 c 30,-60 60,-60 90,0 c 30,-60 60,-60 90,0 c 30,-60 60,-60 90,0', start: [50,180], end: [320,180]},
+  {name: 'Spirálka', d: 'M 200,150 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0 a 40,40 0 1,0 80,0', start: [150,150], end: [240,150]}
+];
+
+const SHAPES = [
+  {name: 'Kruh', d: 'M 200,80 a 70,70 0 1,1 -0.1,0 z', start: [200,80], end: [200,80], closed: true},
+  {name: 'Čtverec', d: 'M 130,80 L 270,80 L 270,220 L 130,220 Z', start: [130,80], end: [130,80], closed: true},
+  {name: 'Trojúhelník', d: 'M 200,60 L 320,240 L 80,240 Z', start: [200,60], end: [200,60], closed: true},
+  {name: 'Srdíčko', d: 'M 200,250 C 200,250 100,180 100,120 C 100,80 130,60 160,60 C 180,60 195,75 200,90 C 205,75 220,60 240,60 C 270,60 300,80 300,120 C 300,180 200,250 200,250 Z', start: [200,250], end: [200,250], closed: true},
+  {name: 'Hvězda', d: 'M 200,60 L 220,140 L 300,140 L 235,190 L 260,270 L 200,220 L 140,270 L 165,190 L 100,140 L 180,140 Z', start: [200,60], end: [200,60], closed: true}
+];
+
+/* ═══════════════════════════════════════════════════
+   TRACING LOGIC
+═══════════════════════════════════════════════════ */
+let userPath = [];
+let isDrawing = false;
+let currentPath = null;
+
+function startTrace(arr){
+  session = {
+    queue: shuffle(arr).slice(0, Math.min(5, arr.length)),
+    idx: 0,
+    correct: 0,
+    completed: 0
+  };
+  goView('trace');
+  renderTrace();
+  setupDrawing();
+}
+
+function renderTrace(){
+  if(session.idx >= session.queue.length){
+    // Hotovo - body podle úspěšnosti
+    const pts = session.correct * 8 + session.completed * 3;
+    if(currentCv) addPoints(currentCv, pts);
+
+    let title, icon, desc;
+    if(session.correct === session.queue.length){
+      title = 'Skvělá práce!'; icon = '🏆';
+      desc = `Všech ${session.queue.length} tvarů jsi obtáhla správně!`;
+    } else if(session.correct >= session.queue.length / 2){
+      title = 'Dobře!'; icon = '🎉';
+      desc = `Úspěšně jsi obtáhla ${session.correct} z ${session.queue.length}.`;
+    } else {
+      title = 'Dobrý pokus!'; icon = '💪';
+      desc = `Hotovo ${session.completed} z ${session.queue.length}. Zkus to znovu!`;
+    }
+    $('done-title').textContent = title;
+    $('done-icon').textContent = icon;
+    $('done-desc').textContent = desc;
+    $('done-pts').textContent = pts;
+    goView('done');
+    return;
+  }
+
+  $('pf-tr').style.width = ((session.idx) / session.queue.length * 100) + '%';
+  currentPath = session.queue[session.idx];
+
+  $('trace-zadani').innerHTML = `<b>${currentPath.name}</b> — začni u 🟢 a táhni po čáře`;
+
+  $('guide-line').setAttribute('d', currentPath.d);
+  $('start-dot').setAttribute('cx', currentPath.start[0]);
+  $('start-dot').setAttribute('cy', currentPath.start[1]);
+  $('end-dot').setAttribute('cx', currentPath.end[0]);
+  $('end-dot').setAttribute('cy', currentPath.end[1]);
+
+  // Pokud closed (uzavřený tvar), schovat end-dot
+  if(currentPath.closed){
+    $('end-dot').setAttribute('r', '0');
+  } else {
+    $('end-dot').setAttribute('r', '12');
+  }
+
+  clearDraw();
+}
+
+function clearDraw(){
+  userPath = [];
+  $('user-path').setAttribute('d', '');
+  $('draw-feedback').textContent = '';
+  $('draw-feedback').className = 'draw-feedback';
+}
+
+function setupDrawing(){
+  const svg = $('draw-svg');
+
+  function getPoint(e){
+    const pt = svg.createSVGPoint();
+    let clientX, clientY;
+    if(e.touches && e.touches.length > 0){
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    pt.x = clientX;
+    pt.y = clientY;
+    const ctm = svg.getScreenCTM().inverse();
+    const p = pt.matrixTransform(ctm);
+    return {x: p.x, y: p.y};
+  }
+
+  function pointsToD(){
+    if(userPath.length === 0) return '';
+    let d = `M ${userPath[0].x.toFixed(1)},${userPath[0].y.toFixed(1)}`;
+    for(let i = 1; i < userPath.length; i++){
+      d += ` L ${userPath[i].x.toFixed(1)},${userPath[i].y.toFixed(1)}`;
+    }
+    return d;
+  }
+
+  function start(e){
+    e.preventDefault();
+    isDrawing = true;
+    userPath = [];
+    const p = getPoint(e);
+    userPath.push(p);
+    $('user-path').setAttribute('d', pointsToD());
+  }
+
+  function move(e){
+    if(!isDrawing) return;
+    e.preventDefault();
+    const p = getPoint(e);
+    // Throttle - jen pokud se vzdálil od posledního bodu
+    const last = userPath[userPath.length - 1];
+    const dist = Math.hypot(p.x - last.x, p.y - last.y);
+    if(dist > 2){
+      userPath.push(p);
+      $('user-path').setAttribute('d', pointsToD());
+    }
+  }
+
+  function end(e){
+    isDrawing = false;
+  }
+
+  // Mouse events
+  svg.addEventListener('mousedown', start);
+  svg.addEventListener('mousemove', move);
+  svg.addEventListener('mouseup', end);
+  svg.addEventListener('mouseleave', end);
+  // Touch events
+  svg.addEventListener('touchstart', start);
+  svg.addEventListener('touchmove', move);
+  svg.addEventListener('touchend', end);
+  svg.addEventListener('touchcancel', end);
+}
+
+function checkDraw(){
+  if(!currentPath) return;
+  if(userPath.length < 3){
+    $('draw-feedback').textContent = '⚠️ Nakresli něco a pak klikni Hotovo.';
+    $('draw-feedback').className = 'draw-feedback bad';
+    return;
+  }
+
+  // Vzorky z guide path
+  const samples = sampleGuidePath();
+  if(!samples) return;
+
+  // Pro každý vzorek najdi nejbližší bod v userPath
+  let totalDistance = 0;
+  let matchedCount = 0;
+  const threshold = 35; // pixelová vzdálenost která ještě počítá jako "blízko"
+
+  samples.forEach(sample => {
+    let minDist = Infinity;
+    userPath.forEach(p => {
+      const d = Math.hypot(p.x - sample.x, p.y - sample.y);
+      if(d < minDist) minDist = d;
+    });
+    if(minDist < threshold) matchedCount++;
+    totalDistance += Math.min(minDist, threshold * 2);
+  });
+
+  const coverage = matchedCount / samples.length;
+  // Penalizace pokud userPath je výrazně delší (čmárá kolem)
+  const idealLen = samples.length;
+  const userLen = userPath.length;
+  const lengthRatio = userLen / idealLen;
+  const overdraw = lengthRatio > 3 ? 0.7 : 1.0;
+
+  const score = coverage * overdraw;
+
+  session.completed++;
+
+  if(score >= 0.75){
+    $('draw-feedback').textContent = '🎉 Výborně! Skvělé obtažení.';
+    $('draw-feedback').className = 'draw-feedback good';
+    session.correct++;
+  } else if(score >= 0.5){
+    $('draw-feedback').textContent = '👍 Dobré! Příště zkus přesněji.';
+    $('draw-feedback').className = 'draw-feedback good';
+  } else {
+    $('draw-feedback').textContent = '💪 Zkus to znova, držet se víc čáry.';
+    $('draw-feedback').className = 'draw-feedback bad';
+  }
+
+  setTimeout(() => {
+    session.idx++;
+    renderTrace();
+  }, 1800);
+}
+
+function skipCurrent(){
+  session.completed++;
+  session.idx++;
+  renderTrace();
+}
+
+function sampleGuidePath(){
+  // Vzorkuj body podél SVG path - pomocí getPointAtLength
+  if(!currentPath) return null;
+  const tmpSvg = $('draw-svg');
+  const ns = 'http://www.w3.org/2000/svg';
+  const tmpPath = document.createElementNS(ns, 'path');
+  tmpPath.setAttribute('d', currentPath.d);
+  tmpSvg.appendChild(tmpPath);
+
+  const totalLength = tmpPath.getTotalLength();
+  const samples = [];
+  const N = 40; // počet vzorků
+  for(let i = 0; i <= N; i++){
+    const pt = tmpPath.getPointAtLength(totalLength * i / N);
+    samples.push({x: pt.x, y: pt.y});
+  }
+
+  tmpSvg.removeChild(tmpPath);
+  return samples;
+}
+
+renderTotalPoints();
+</script>
+</body>
+</html>
