@@ -678,10 +678,9 @@ body{
       <button class="listen-btn" id="listen-kd" onclick="listenCurrent()">
         🔊 Poslechnout
       </button>
-      <div style="margin-top:1rem;font-size:2rem" id="kd-emoji">🦓</div>
     </div>
     <p style="text-align:center;color:var(--ink-soft);margin-bottom:1rem;font-weight:600">
-      Má slovo krátkou (a, e, i...) nebo dlouhou (á, é, í...) slabiku?
+      Má slovo krátkou nebo dlouhou samohlásku?
     </p>
     <div class="kd-grid">
       <button class="kd-btn" data-typ="kratka" onclick="answerKD('kratka', this)">
@@ -795,7 +794,7 @@ const SLOVNIK = [
   {slovo: 'mléko', emoji: '🥛', pismeno: 'M', slabiky: 2, rym: 'éko', dlouha: true},
   {slovo: 'káva', emoji: '☕', pismeno: 'K', slabiky: 2, rym: 'áva', dlouha: true},
   {slovo: 'sýr', emoji: '🧀', pismeno: 'S', slabiky: 1, rym: 'ýr', dlouha: true},
-  {slovo: 'pávek', emoji: '🦚', pismeno: 'P', slabiky: 2, rym: 'ávek', dlouha: true},
+  {slovo: 'páv', emoji: '🦚', pismeno: 'P', slabiky: 1, rym: 'áv', dlouha: true},
   {slovo: 'lístek', emoji: '🎫', pismeno: 'L', slabiky: 2, rym: 'ístek', dlouha: true},
   {slovo: 'džus', emoji: '🧃', pismeno: 'D', slabiky: 1, rym: 'us', dlouha: false}
 ];
@@ -1141,15 +1140,74 @@ function answerSlabiky(num, btn){
 /* ═══════════════════════════════════════════════════
    CV 4: KRÁTKÁ / DLOUHÁ
 ═══════════════════════════════════════════════════ */
-function startKratkaDlouha(){
-  // 8 kol - vyvážený mix krátkých a dlouhých slabik
-  const dlouhe = SLOVNIK.filter(s => s.dlouha);
-  const kratke = SLOVNIK.filter(s => !s.dlouha);
 
-  const queue = [];
+// Vlastní seznam jednoslabičných slov s jednou samohláskou
+// Krátká samohláska
+const SLOVA_KD = [
+  // Krátká
+  {slovo: 'les', dlouha: false},
+  {slovo: 'pes', dlouha: false},
+  {slovo: 'kos', dlouha: false},
+  {slovo: 'koš', dlouha: false},
+  {slovo: 'los', dlouha: false},
+  {slovo: 'med', dlouha: false},
+  {slovo: 'led', dlouha: false},
+  {slovo: 'syn', dlouha: false},
+  {slovo: 'syr', dlouha: false},
+  {slovo: 'dům', dlouha: true},
+  {slovo: 'sůl', dlouha: true},
+  {slovo: 'stůl', dlouha: true},
+  {slovo: 'sál', dlouha: true},
+  {slovo: 'šál', dlouha: true},
+  {slovo: 'vůl', dlouha: true},
+  {slovo: 'bál', dlouha: true},
+  {slovo: 'pán', dlouha: true},
+  {slovo: 'kůň', dlouha: true},
+  {slovo: 'plán', dlouha: true},
+  {slovo: 'rád', dlouha: true},
+  {slovo: 'kéď', dlouha: true},
+  {slovo: 'míč', dlouha: true},
+  {slovo: 'sýr', dlouha: true},
+  // další krátká
+  {slovo: 'dům', dlouha: true},
+  {slovo: 'rok', dlouha: false},
+  {slovo: 'led', dlouha: false},
+  {slovo: 'sen', dlouha: false},
+  {slovo: 'den', dlouha: false},
+  {slovo: 'jih', dlouha: false},
+  {slovo: 'lev', dlouha: false},
+  {slovo: 'nos', dlouha: false},
+  {slovo: 'led', dlouha: false},
+  {slovo: 'zub', dlouha: false},
+  {slovo: 'kel', dlouha: false},
+  {slovo: 'pec', dlouha: false},
+  // dlouhá
+  {slovo: 'kůl', dlouha: true},
+  {slovo: 'ráj', dlouha: true},
+  {slovo: 'lék', dlouha: true},
+  {slovo: 'sén', dlouha: true},
+  {slovo: 'pár', dlouha: true},
+  {slovo: 'zář', dlouha: true},
+  {slovo: 'záď', dlouha: true},
+  {slovo: 'lán', dlouha: true},
+  {slovo: 'sám', dlouha: true},
+  {slovo: 'mák', dlouha: true},
+  {slovo: 'mír', dlouha: true},
+  {slovo: 'rýč', dlouha: true},
+  {slovo: 'klín', dlouha: true},
+  {slovo: 'běh', dlouha: false},
+  {slovo: 'svět', dlouha: false}
+];
+
+function startKratkaDlouha(){
+  // 8 kol - vyvážený mix
+  const dlouhe = SLOVA_KD.filter(s => s.dlouha);
+  const kratke = SLOVA_KD.filter(s => !s.dlouha);
+
   const usedD = shuffle(dlouhe).slice(0, 4);
   const usedK = shuffle(kratke).slice(0, 4);
 
+  const queue = [];
   [...usedD, ...usedK].forEach(s => queue.push({target: s}));
 
   session = {queue: shuffle(queue), idx: 0, correct: 0, locked: false};
@@ -1164,8 +1222,6 @@ function renderKratkaDlouha(){
     return;
   }
   $('pf-kd').style.width = ((session.idx) / session.queue.length * 100) + '%';
-  const kolo = session.queue[session.idx];
-  $('kd-emoji').textContent = kolo.target.emoji;
 
   document.querySelectorAll('#view-kratka-dlouha .kd-btn').forEach(b => {
     b.classList.remove('correct', 'wrong');

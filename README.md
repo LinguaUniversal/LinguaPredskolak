@@ -1,79 +1,41 @@
-# Lingua · Kroužek předškoláka
+# Lingua · Kroužek předškoláka v3.1
 
-Aplikace pro **půlroční kurz Kroužek předškoláka** ZŠ Lingua Universal — příprava k zápisu do 1. třídy.
+**Aktualizace podle připomínek:**
+- 👂 **Krátká/dlouhá samohláska** — bez obrázků a tabulek, jednoslabičná slova (les, sůl, pes, stůl, los, koš, med, led, sál, šál, vůl, mák, sýr…)
+- 🦚 **Páv** místo *pávek*
+- 🧭 **Prostorová orientace přepracována:**
+  - ❌ Kterým letí (nepřesnost) → ✅ **Kde je míček?** (předložky NA / POD / V / VEDLE / NAD krabičky)
+  - ❌ Kde je předmět (mřížka) → ✅ **Levá / pravá** (zvířátka, podle hlavy, bez šipek — text čte rodič)
+  - ✅ Bludiště (zachováno)
+- 👨‍👩‍👧 **Rodiče sekce** — přidáno **8 užitečných odkazů** + sekce **Před zápisem**
 
-**KOMPLETNÍ VERZE — všech 6 oblastí hotových!** ✅
+## 6 oblastí (kompletní)
 
-## Vizuál
+| Oblast | Cvičení |
+|--------|---------|
+| 🔢 Předmatematické | Kde je víc, Bingo s tečkami, Spoj počet s číslem |
+| 👂 Sluchové (s audiem) | První písmeno, Rýmy, Počty slabik, Krátká/dlouhá (jednoslabičná slova) |
+| 👁️ Zrakové | Najdi rozdíl, Doplň vzor, Najdi všechna stejná |
+| 🧭 Prostorová | **Kde je míček (předložky)**, **Levá/pravá**, Bludiště |
+| ⏰ Časová | Co bylo dřív, Denní režim, Roční období |
+| 🖍️ Grafomotorika | Čáry, Vlnky, Tvary (SVG tracing) |
 
-- **Font**: Barlow Condensed
-- **Hlavní barvy**: školní modrá `#32a0d2` + oranžová `#ffaa37`
-- **Akcent per oblast** (6 různých barev)
-- Sjednoceno se stylem LinguaCzech / II / Deutsch
+## Užitečné odkazy v sekci pro rodiče
 
-## 6 oblastí
-
-| Oblast | Cvičení | Barva |
-|--------|---------|-------|
-| 🔢 **Předmatematické představy** | Kde je víc, Bingo s tečkami, Spoj počet s číslem | růžová |
-| 👂 **Sluchové vnímání** | První písmeno, Rýmy, Počty slabik, Krátká/dlouhá (s audiem) | zelená |
-| 👁️ **Zrakové vnímání** | Najdi rozdíl, Doplň vzor, Najdi všechna stejná | fialová |
-| 🧭 **Prostorová orientace** | Kterým směrem, Kde je předmět, Bludiště | žlutá |
-| ⏰ **Časová orientace** | Co bylo dřív, Denní režim, Roční období | modrá |
-| 🖍️ **Grafomotorika** | Čáry, Vlnky a kličky, Tvary (SVG tracing) | červená |
-
-**CELKEM: 19 interaktivních cvičení**
-
-## Soubory
-
-```
-index.html               ← Landing - 6 oblastí
-rodice.html              ← Pro rodiče - tipy, diagnostika, tisk
-predmatematicke.html     ← 3 cvičení (růžová)
-sluchove.html            ← 4 cvičení s audiem (zelená)
-zrakove.html             ← 3 cvičení (fialová)
-prostorova.html          ← 3 cvičení (žlutá)
-casova.html              ← 3 cvičení (modrá)
-grafomotorika.html       ← 3 tracing cvičení (červená)
-logo.png                 ← Školní logo
-```
-
-## Speciální funkce
-
-### 🔊 Audio (sluchové vnímání)
-Web Speech API s `lang="cs-CZ"`. Funguje v Chrome, Edge, Safari.
-
-### 🖍️ SVG Tracing (grafomotorika)
-- Funguje **myší i prstem** (touch events)
-- Hodnocení podle pokrytí vzorové čáry
-- 15 různých tvarů (čáry, vlnky, kličky, geometrické tvary, srdíčko, hvězda)
-
-### 🐭 Bludiště (prostorová)
-- 7×7 mřížka s ovládáním šipek
-- 3 různá bludiště
-- Hodnocení podle počtu tahů
-
-### 👨‍👩‍👧 Pro rodiče
-- Detailní popis každé oblasti
-- Vhodné aktivity pro domov
-- Diagnostické tlačítka (Začíná / Zkouší / Zvládá / Expert)
-- **Tisknutelný záznamový arch** — titulní strana + tabulka
-
-## Bodový systém
-
-⭐ Hvězdičky místo trofejí. Body se ukládají per oblast v localStorage:
-- `lingua-predskolak-predmat-v1`
-- `lingua-predskolak-sluchove-v1`
-- `lingua-predskolak-zrakove-v1`
-- `lingua-predskolak-prostorova-v1`
-- `lingua-predskolak-casova-v1`
-- `lingua-predskolak-grafomotorika-v1`
-- `lingua-predskolak-diagnostika-v1` (rodičovská diagnostika)
+- ZŠ Lingua Universal
+- LinguaCzech (sesterský web)
+- Předškoláci.cz
+- Materiály pro učitele
+- Včelka (česká aplikace)
+- PPP Ústecký kraj
+- Knihovna K. H. Máchy Litoměřice
+- MŠMT — Zápis do 1. třídy
 
 ## Nasazení
 
 V repu `LinguaPredskolak`:
-- `https://linguauniversal.github.io/LinguaPredskolak/`
+- Přepiš všechny soubory (kromě logo.png)
+- Localstorage klíče zůstaly stejné — body žáků se zachovají
 
 ## Licence
 

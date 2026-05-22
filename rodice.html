@@ -353,6 +353,63 @@ body{
 .tip-block-title{ font-size: 1.15rem; font-weight: 800; margin-bottom: .3rem; color: var(--ink); }
 .tip-block-desc{ font-size: .95rem; color: var(--ink-soft); line-height: 1.5; }
 
+/* === Odkazy === */
+.odkazy-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.odkaz-card{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--rl);
+  padding: 1.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  transition: all .15s;
+}
+.odkaz-card:hover{
+  border-color: var(--blue);
+  box-shadow: var(--shadow);
+}
+.odkaz-icon{
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  background: var(--blue-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.odkaz-content{ flex: 1; min-width: 0; }
+.odkaz-title{
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: .25rem;
+}
+.odkaz-desc{
+  font-size: .9rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-bottom: .5rem;
+}
+.odkaz-link{
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: none;
+  word-break: break-word;
+}
+.odkaz-link:hover{ text-decoration: underline; }
+
 /* Print btn */
 .print-section{
   background: var(--surface);
@@ -753,6 +810,97 @@ body{
       <div class="tip-block-title">Trpělivost</div>
       <div class="tip-block-desc">Každé dítě má své tempo. Srovnání s vrstevníky není měřítko úspěchu.</div>
     </div>
+  </div>
+
+  <h2 class="section-title">🔗 Užitečné odkazy</h2>
+  <div class="intro-card">
+    Sestavili jsme přehled webů a aplikací, které vám mohou pomoci s přípravou doma. Kombinace různých zdrojů je nejúčinnější — papír, pohyb i digitál.
+  </div>
+
+  <div class="odkazy-grid">
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">🏫</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">ZŠ Lingua Universal</div>
+        <div class="odkaz-desc">Informace o zápisu, dnech otevřených dveří a kroužku předškoláka.</div>
+        <a href="https://www.zslingua.cz" target="_blank" rel="noopener" class="odkaz-link">zslingua.cz ↗</a>
+      </div>
+    </div>
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">📚</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">LinguaCzech — 1. třída</div>
+        <div class="odkaz-desc">Když dítě začne číst — interaktivní cvičení na písmena, slova a čtení.</div>
+        <a href="https://linguauniversal.github.io/LinguaCzech/" target="_blank" rel="noopener" class="odkaz-link">linguauniversal.github.io/LinguaCzech ↗</a>
+      </div>
+    </div>
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">📖</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">Předškolák.cz</div>
+        <div class="odkaz-desc">Velký český portál s pracovními listy zdarma — grafomotorika, matematika, předškolní výchova.</div>
+        <a href="https://www.predskolaci.cz" target="_blank" rel="noopener" class="odkaz-link">predskolaci.cz ↗</a>
+      </div>
+    </div>
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">✏️</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">Materiály pro učitele</div>
+        <div class="odkaz-desc">Předškolní portál s pracovními listy, omalovánkami a pohybovými hrami.</div>
+        <a href="https://materialyproucitele.cz/" target="_blank" rel="noopener" class="odkaz-link">materialyproucitele.cz ↗</a>
+      </div>
+    </div>
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">🎮</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">Včelka — interaktivní cvičení</div>
+        <div class="odkaz-desc">Aplikace pro nácvik čtení, psaní a logopedii (česká).</div>
+        <a href="https://www.vcelka.cz" target="_blank" rel="noopener" class="odkaz-link">vcelka.cz ↗</a>
+      </div>
+    </div>
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">🧠</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">Pedagogicko-psychologická poradna</div>
+        <div class="odkaz-desc">Pokud máte podezření na vývojové opoždění, nebo zvažujete odklad.</div>
+        <a href="https://www.pppuk.cz" target="_blank" rel="noopener" class="odkaz-link">PPP Ústecký kraj ↗</a>
+      </div>
+    </div>
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">📕</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">Knihovna Karla Hynka Máchy</div>
+        <div class="odkaz-desc">Knihy pro předškoláky, čtenářské kroužky a programy v Litoměřicích.</div>
+        <a href="https://knihovnalitomerice.cz" target="_blank" rel="noopener" class="odkaz-link">knihovnalitomerice.cz ↗</a>
+      </div>
+    </div>
+
+    <div class="odkaz-card">
+      <div class="odkaz-icon">🎨</div>
+      <div class="odkaz-content">
+        <div class="odkaz-title">MŠMT — Zápis do 1. třídy</div>
+        <div class="odkaz-desc">Oficiální informace o povinné školní docházce, odkladu a kritériích.</div>
+        <a href="https://www.msmt.cz/vzdelavani/zakladni-vzdelavani/zapis-do-1-trid" target="_blank" rel="noopener" class="odkaz-link">msmt.cz ↗</a>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">📝 Před zápisem</h2>
+  <div class="intro-card">
+    <b>Pár praktických rad před zápisem:</b><br>
+    • Promluvte si s dítětem o tom, co u zápisu bude — pozdrav, řekne jméno, předvede co umí.<br>
+    • Trénujte podpis jménem (ne příjmením) — pomáhá to sebejistotě.<br>
+    • Pokud máte podezření na odklad, navštivte PPP a pediatra <b>nejpozději 6 měsíců před zápisem</b>.<br>
+    • Den před zápisem dítě dostatečně vyspěte a najezte. Zápis je krátký (cca 20-30 minut).<br>
+    • Po zápisu dítě pochvalte — bez ohledu na výsledek!
   </div>
 
   <div class="print-section">
