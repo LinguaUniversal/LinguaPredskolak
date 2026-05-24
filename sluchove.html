@@ -605,8 +605,8 @@ body{
       <button class="cv-card" onclick="startCv('kratka-dlouha')">
         <div class="cv-icon">📏</div>
         <div class="cv-content">
-          <div class="cv-title">Krátká nebo dlouhá?</div>
-          <div class="cv-desc">Slyšíš slovo. Má krátkou nebo dlouhou slabiku?</div>
+          <div class="cv-title">Dlouhé písmeno?</div>
+          <div class="cv-desc">Slyšíš slovo. Je v něm dlouhé písmeno (á, í, ů…)?</div>
         </div>
         <div class="cv-stars" data-cv="kratka-dlouha"></div>
         <div class="cv-arrow">→</div>
@@ -680,16 +680,16 @@ body{
       </button>
     </div>
     <p style="text-align:center;color:var(--ink-soft);margin-bottom:1rem;font-weight:600">
-      Má slovo krátkou nebo dlouhou samohlásku?
+      Je ve slově dlouhé písmeno? (á, é, í, ó, ú, ů, ý)
     </p>
     <div class="kd-grid">
-      <button class="kd-btn" data-typ="kratka" onclick="answerKD('kratka', this)">
-        <span class="kd-btn-icon">🔵</span>
-        Krátká
-      </button>
       <button class="kd-btn" data-typ="dlouha" onclick="answerKD('dlouha', this)">
-        <span class="kd-btn-icon">🟠</span>
-        Dlouhá
+        <span class="kd-btn-icon">✅</span>
+        ANO, je
+      </button>
+      <button class="kd-btn" data-typ="kratka" onclick="answerKD('kratka', this)">
+        <span class="kd-btn-icon">❌</span>
+        NE, není
       </button>
     </div>
   </div>
@@ -733,7 +733,6 @@ const SLOVNIK = [
   {slovo: 'ananas', emoji: '🍍', pismeno: 'A', slabiky: 3, rym: 'ananas', dlouha: false},
   // B
   {slovo: 'banán', emoji: '🍌', pismeno: 'B', slabiky: 2, rym: 'an', dlouha: true},
-  {slovo: 'balon', emoji: '🎈', pismeno: 'B', slabiky: 2, rym: 'on', dlouha: false},
   // D
   {slovo: 'dům', emoji: '🏠', pismeno: 'D', slabiky: 1, rym: 'um', dlouha: true},
   {slovo: 'dort', emoji: '🍰', pismeno: 'D', slabiky: 1, rym: 'ort', dlouha: false},
@@ -777,16 +776,13 @@ const SLOVNIK = [
   {slovo: 'strom', emoji: '🌳', pismeno: 'S', slabiky: 1, rym: 'rom', dlouha: false},
   // T
   {slovo: 'tygr', emoji: '🐯', pismeno: 'T', slabiky: 1, rym: 'gr', dlouha: false},
-  {slovo: 'taška', emoji: '🎒', pismeno: 'T', slabiky: 2, rym: 'ška', dlouha: false},
   // V
   {slovo: 'vlak', emoji: '🚂', pismeno: 'V', slabiky: 1, rym: 'ak', dlouha: false},
   {slovo: 'voda', emoji: '💧', pismeno: 'V', slabiky: 2, rym: 'oda', dlouha: false},
   {slovo: 'včela', emoji: '🐝', pismeno: 'V', slabiky: 2, rym: 'ela', dlouha: false},
   // Z
   {slovo: 'zebra', emoji: '🦓', pismeno: 'Z', slabiky: 2, rym: 'ebra', dlouha: false},
-  {slovo: 'zajíc', emoji: '🐰', pismeno: 'Z', slabiky: 2, rym: 'íc', dlouha: true},
   // Č
-  {slovo: 'čáp', emoji: '🦤', pismeno: 'Č', slabiky: 1, rym: 'áp', dlouha: true},
   // Ž
   {slovo: 'žába', emoji: '🐸', pismeno: 'Ž', slabiky: 2, rym: 'ába', dlouha: true},
   {slovo: 'žirafa', emoji: '🦒', pismeno: 'Ž', slabiky: 3, rym: 'afa', dlouha: false},
@@ -795,8 +791,11 @@ const SLOVNIK = [
   {slovo: 'káva', emoji: '☕', pismeno: 'K', slabiky: 2, rym: 'áva', dlouha: true},
   {slovo: 'sýr', emoji: '🧀', pismeno: 'S', slabiky: 1, rym: 'ýr', dlouha: true},
   {slovo: 'páv', emoji: '🦚', pismeno: 'P', slabiky: 1, rym: 'áv', dlouha: true},
-  {slovo: 'lístek', emoji: '🎫', pismeno: 'L', slabiky: 2, rym: 'ístek', dlouha: true},
-  {slovo: 'džus', emoji: '🧃', pismeno: 'D', slabiky: 1, rym: 'us', dlouha: false}
+  {slovo: 'myška', emoji: '🐁', pismeno: 'M', slabiky: 2, rym: 'ška', dlouha: false},
+  {slovo: 'drak', emoji: '🐉', pismeno: 'D', slabiky: 1, rym: 'ak', dlouha: false},
+  {slovo: 'mrak', emoji: '☁️', pismeno: 'M', slabiky: 1, rym: 'ak', dlouha: false},
+  {slovo: 'koza', emoji: '🐐', pismeno: 'K', slabiky: 2, rym: 'oza', dlouha: false},
+  {slovo: 'rak', emoji: '🦞', pismeno: 'R', slabiky: 1, rym: 'ak', dlouha: false},
 ];
 
 /* === AUDIO === */
@@ -1144,7 +1143,7 @@ function answerSlabiky(num, btn){
 // Vlastní seznam jednoslabičných slov s jednou samohláskou
 // Krátká samohláska
 const SLOVA_KD = [
-  // Krátká
+  // Krátká (bez dlouhého písmene)
   {slovo: 'les', dlouha: false},
   {slovo: 'pes', dlouha: false},
   {slovo: 'kos', dlouha: false},
@@ -1153,50 +1152,39 @@ const SLOVA_KD = [
   {slovo: 'med', dlouha: false},
   {slovo: 'led', dlouha: false},
   {slovo: 'syn', dlouha: false},
-  {slovo: 'syr', dlouha: false},
+  {slovo: 'sen', dlouha: false},
+  {slovo: 'den', dlouha: false},
+  {slovo: 'rok', dlouha: false},
+  {slovo: 'lev', dlouha: false},
+  {slovo: 'nos', dlouha: false},
+  {slovo: 'zub', dlouha: false},
+  {slovo: 'pec', dlouha: false},
+  {slovo: 'běh', dlouha: false},
+  {slovo: 'svět', dlouha: false},
+  {slovo: 'strom', dlouha: false},
+  {slovo: 'vlak', dlouha: false},
+  {slovo: 'most', dlouha: false},
+  // Dlouhá (má dlouhé písmeno á é í ó ú ů ý)
   {slovo: 'dům', dlouha: true},
   {slovo: 'sůl', dlouha: true},
   {slovo: 'stůl', dlouha: true},
   {slovo: 'sál', dlouha: true},
   {slovo: 'šál', dlouha: true},
   {slovo: 'vůl', dlouha: true},
-  {slovo: 'bál', dlouha: true},
   {slovo: 'pán', dlouha: true},
   {slovo: 'kůň', dlouha: true},
   {slovo: 'plán', dlouha: true},
-  {slovo: 'rád', dlouha: true},
-  {slovo: 'kéď', dlouha: true},
   {slovo: 'míč', dlouha: true},
   {slovo: 'sýr', dlouha: true},
-  // další krátká
-  {slovo: 'dům', dlouha: true},
-  {slovo: 'rok', dlouha: false},
-  {slovo: 'led', dlouha: false},
-  {slovo: 'sen', dlouha: false},
-  {slovo: 'den', dlouha: false},
-  {slovo: 'jih', dlouha: false},
-  {slovo: 'lev', dlouha: false},
-  {slovo: 'nos', dlouha: false},
-  {slovo: 'led', dlouha: false},
-  {slovo: 'zub', dlouha: false},
-  {slovo: 'kel', dlouha: false},
-  {slovo: 'pec', dlouha: false},
-  // dlouhá
   {slovo: 'kůl', dlouha: true},
   {slovo: 'ráj', dlouha: true},
   {slovo: 'lék', dlouha: true},
-  {slovo: 'sén', dlouha: true},
   {slovo: 'pár', dlouha: true},
-  {slovo: 'zář', dlouha: true},
-  {slovo: 'záď', dlouha: true},
   {slovo: 'lán', dlouha: true},
-  {slovo: 'sám', dlouha: true},
   {slovo: 'mák', dlouha: true},
   {slovo: 'mír', dlouha: true},
-  {slovo: 'rýč', dlouha: true},
   {slovo: 'klín', dlouha: true},
-  {slovo: 'běh', dlouha: false},
-  {slovo: 'svět', dlouha: false}
+  {slovo: 'sníh', dlouha: true}
 ];
 
 function startKratkaDlouha(){
